@@ -1,7 +1,8 @@
-import { User } from '../models/associations.js'
+import { RefreshToken, User } from '../models/associations.js'
 import generateToken from "../utils/generateToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
 import bcrypt from 'bcrypt'
+import crypto from 'crypto'
 
 const registerUser = async (req, res) => {
   try {
@@ -66,16 +67,44 @@ const loginUser = async (req, res) => {
 
       const { password: _, ...userData } = user.toJSON();
 
-      res.status(201).json({ message: "User created successfully", user: userData, accessToken, refreshToken });
+      res.status(201).json({ message: "User Logged In successfully", user: userData, accessToken, refreshToken });
 
     }
 
 
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" });
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Something went wrong", error: error.message });
   }
 }
 
+const logoutUser = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
 
+    if (!refreshToken) {
+      return res.status(400).json({ message: "Refresh token is required" });
+    }
 
-export { registerUser, loginUser }
+    const tokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex");
+
+    const deleted = await RefreshToken.destroy({
+      where: {
+        token_hash: tokenHash,
+        revoked_at: null,
+      },
+    });
+
+    if (!deleted) {
+      return res.status(400).json({ message: "Invalid or already revoked token" });
+    }
+
+    res.status(200).json({ message: "Logged out successfully" });
+
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ message: "Something went wrong", error: error.message });
+  }
+}
+
+export { registerUser, loginUser, logoutUser }
