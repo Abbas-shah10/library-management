@@ -1,6 +1,6 @@
 import express, { urlencoded } from "express";
 import dotenv from "dotenv";
-
+import cors from 'cors'
 // Utils
 import sequelize from "./db/connectDb.js";
 import userRoutes from './routes/user.route.js'
@@ -12,6 +12,11 @@ const PORT = process.env.PORT || 8000;
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+  credentials: true,
+}))
 
 
 async function startServer() {
