@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   );
 };

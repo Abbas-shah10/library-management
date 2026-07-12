@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/authApi";
 import useAuthStore from "../store/authStore";
 import { BookOpen, Mail, Lock, LogIn } from "lucide-react";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -10,7 +11,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  // const { setAuth } = useAuthStore();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +20,8 @@ const Login = () => {
 
     try {
       const data = await loginUser(email, password);
-      // setAuth(data.user, data.accessToken, data.refreshToken);
+      toast("User Logged in Successfully");
+      setAuth(data.user, data.accessToken, data.refreshToken);
       navigate("/dashboard");
     } catch {
       setError("Invalid email or password");
