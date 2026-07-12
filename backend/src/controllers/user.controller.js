@@ -1,5 +1,6 @@
 import { User } from '../models/associations.js'
 import generateToken from "../utils/generateToken.js";
+import generateRefreshToken from "../utils/generateRefreshToken.js";
 import bcrypt from 'bcrypt'
 
 const registerUser = async (req, res) => {
@@ -25,9 +26,12 @@ const registerUser = async (req, res) => {
       member_id: member_id || null,
     });
 
+    const accessToken = generateToken(user.id);
+    const refreshToken = await generateRefreshToken(user.id);
+
     const { password: _, ...userData } = user.toJSON();
 
-    res.status(400).json({ message: "Failed to create user" });
+    res.status(201).json({ message: "User created successfully", user: userData, accessToken, refreshToken });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }
