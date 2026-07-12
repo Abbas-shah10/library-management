@@ -7,10 +7,12 @@ import Loan from "./loan.model.js";
 import Fine from "./fine.model.js";
 import Reservation from "./reservation.model.js";
 import User from './user.model.js'
-
-
+import RefreshToken from './refreshToken.model.js'
 
 User.belongsTo(Member, { foreignKey: "member_id" });
+
+User.hasMany(RefreshToken, { foreignKey: "user_id" });
+RefreshToken.belongsTo(User, { foreignKey: "user_id" });
 Member.hasOne(User, { foreignKey: "member_id" });
 
 Category.hasMany(Book, { foreignKey: "category_id" });
@@ -34,4 +36,4 @@ Reservation.belongsTo(Member, { foreignKey: "member_id" });
 Book.hasMany(Reservation, { foreignKey: "book_id" });
 Reservation.belongsTo(Book, { foreignKey: "book_id" });
 
-export { Book, Author, Category, BookAuthor, Member, Loan, Fine, Reservation, User };
+export { Book, Author, Category, BookAuthor, Member, Loan, Fine, Reservation, User, RefreshToken };

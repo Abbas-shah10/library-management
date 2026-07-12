@@ -12,7 +12,6 @@ const User = sequelize.define("User", {
   last_login: { type: DataTypes.DATE },
   created_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   updated_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-  refresh_token: { type: DataTypes.TEXT, defaultValue: null }
 }, { timestamps: false });
 
 export default User;
