@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../api/authApi";
-import useAuthStore from "../store/authStore";
+import { logoutUser } from "../../api/authApi";
+import useAuthStore from "../../store/authStore";
 import { BookOpen, LogOut, User as UserIcon, Shield, Mail } from "lucide-react";
 
-const Dashboard = () => {
+const Profile = () => {
   const user = useAuthStore((state) => state.user);
   const refreshToken = useAuthStore((state) => state.refreshToken);
   const logout = useAuthStore((state) => state.logout);
@@ -77,4 +77,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default Profile;
