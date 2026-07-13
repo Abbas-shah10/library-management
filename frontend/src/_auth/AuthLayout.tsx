@@ -1,17 +1,17 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
+import useAuthStore from "../store/authStore";
 
 const AuthLayout = () => {
-  let isAuth = false;
+  const accessToken = useAuthStore((state) => state.accessToken);
+
+  if (accessToken) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
-    <div>
-      {isAuth ? (
-        <Navigate to="/" />
-      ) : (
-        <section>
-          <Outlet />
-        </section>
-      )}
-    </div>
+    <section className="flex flex-1 justify-center items-center flex-col">
+      <Outlet />
+    </section>
   );
 };
 
