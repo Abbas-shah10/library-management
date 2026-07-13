@@ -4,6 +4,7 @@ import cors from 'cors'
 // Utils
 import sequelize from "./db/connectDb.js";
 import userRoutes from './routes/user.route.js'
+import bookRoutes from './routes/books.routes.js';
 dotenv.config();
 
 const app = express();
@@ -23,7 +24,7 @@ async function startServer() {
   try {
     await sequelize.authenticate();
     console.log("Db connected Successfully")
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log("All models synchronized")
   } catch (error) {
     console.error(error);
@@ -32,6 +33,7 @@ async function startServer() {
 await startServer()
 
 app.use("/api/v1/users", userRoutes)
+app.use('/api/v1/books', bookRoutes)
 
 app.listen(PORT, () => {
   console.log(`App is listening on port : ${PORT}`);
