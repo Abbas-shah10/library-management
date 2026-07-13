@@ -5,6 +5,7 @@ import { ToastContainer } from "react-toastify";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import Profile from "./_root/pages/Profile";
+import { Home } from "lucide-react";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         </Route>
 
         <Route element={<RootLayout />}>
+          <Route index element={<Home />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
