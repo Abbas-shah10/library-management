@@ -1,10 +1,9 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { logoutUser } from "../api/authApi";
 import useAuthStore from "../store/authStore";
 import { Home, BookOpen, LogOut, User } from "lucide-react";
 
 const TopBar = () => {
-  const { pathname } = useLocation();
   const { user, refreshToken, logout } = useAuthStore();
   const navigate = useNavigate();
 
@@ -17,7 +16,7 @@ const TopBar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-dark-2/80 backdrop-blur-xl">
+    <header className="stickey top-0 z-50 w-full border-b border-white/10 bg-dark-2/80 backdrop-blur-xl">
       <div className="flex items-center justify-between px-4 md:px-8 py-3 max-w-7xl mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
@@ -28,24 +27,6 @@ const TopBar = () => {
             LibraryMS
           </span>
         </Link>
-
-        {/* Navigation */}
-        <nav className="hidden md:flex items-center gap-1">
-          <NavLink
-            to="/"
-            className={`${pathname ? "bg-white/10" : ""} flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200`}
-          >
-            <Home className="w-4 h-4" />
-            <span className="text-sm font-medium">Home</span>
-          </NavLink>
-          <Link
-            to="/books"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-all duration-200"
-          >
-            <BookOpen className="w-4 h-4" />
-            <span className="text-sm font-medium">Books</span>
-          </Link>
-        </nav>
 
         {/* Right side */}
         <div className="flex items-center gap-3">

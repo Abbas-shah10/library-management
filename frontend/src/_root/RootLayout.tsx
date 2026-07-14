@@ -1,6 +1,7 @@
 import TopBar from "../components/Topbar";
 import { Outlet, Navigate } from "react-router-dom";
 import useAuthStore from "../store/authStore";
+import LeftSidebar from "../components/LeftSidebar";
 
 const RootLayout = () => {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -10,10 +11,11 @@ const RootLayout = () => {
   }
 
   return (
-    <div className="w-full md:flex flex-col">
+    <div className="w-full ">
       <TopBar />
 
-      <section className="flex flex-1 h-full">
+      <LeftSidebar />
+      <section className="flex flex-1 h-full ml-[260px]">
         <Outlet />
       </section>
     </div>
