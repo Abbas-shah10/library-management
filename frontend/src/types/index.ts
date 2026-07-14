@@ -1,5 +1,5 @@
 export type INavLink = {
-  icon: object;
+  icon: string;
   route: string;
   label: string;
 };

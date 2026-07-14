@@ -14,7 +14,6 @@ const LeftSidebar = () => {
           {user.role === "Admin" &&
             adminLinks.map((link: INavLink) => {
               const isActive = pathname === link.route;
-              const LInk = link.icon;
               return (
                 <li
                   key={link.route}
@@ -24,7 +23,7 @@ const LeftSidebar = () => {
                     to={link.route}
                     className="flex gap-4 items-center p-4"
                   >
-                    <LInk />
+                    {link.icon}
                     {link.label}
                   </NavLink>
                 </li>

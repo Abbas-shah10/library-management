@@ -95,4 +95,38 @@ const deleteBook = async (req, res) => {
   }
 }
 
-export { createBook, updateBook, deleteBook }
+const getAllbooks = async (req, res) => {
+  try {
+    const books = await Book.findAll();
+
+    if (books) {
+      res.status(200).json({ message: "All books fetched successfully.", books })
+    } else {
+      res.status(404).json({ message: "Books not found" })
+    }
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ message: "Something went wrong", error: error.message });
+
+  }
+}
+
+const getBookById = async (req, res) => {
+  try {
+
+    const { bookId } = req.params;
+
+    const book = await Book.findByPk(bookId);
+
+    if (book) {
+      res.status(200).json({ message: "Book fetched successfully.", book })
+    } else {
+      res.status(404).json({ message: "Book not found" })
+    }
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ message: "Something went wrong", error: error.message });
+  }
+}
+
+export { createBook, updateBook, deleteBook, getAllbooks, getBookById }

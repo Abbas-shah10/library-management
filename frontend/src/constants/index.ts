@@ -1,27 +1,27 @@
 import {
-  BarChart3,
   BookDown,
   Bookmark,
   BookMarked,
-  BookOpen,
   BookUp,
   CircleDollarSign,
   ClockAlert,
   Home,
   LayoutDashboard,
   Search,
-  Settings,
   User,
   Users,
 } from "lucide-react";
 
 // Admin sidebar
 export const adminLinks = [
-  { icon: LayoutDashboard, route: "/admin/dashboard", label: "Dashboard" },
-  { icon: Users, route: "/admin/users", label: "Users" },
-  { icon: BookOpen, route: "/admin/books", label: "Books" },
-  { icon: BarChart3, route: "/admin/reports", label: "Reports" },
-  { icon: Settings, route: "/admin/settings", label: "Settings" },
+  { icon: "📊", route: "/admin/dashboard", label: "Dashboard", active: true },
+  { icon: "📚", route: "/admin/books", label: "Books" },
+  { icon: "👥", route: "/admin/members", label: "Members" },
+  { icon: "🔄", route: "/admin/loans", label: "Loans" },
+  { icon: "💰", route: "/admin/fines", label: "Fines" },
+  { icon: "📋", route: "/admin/reservation", label: "Reservations" },
+  { icon: "👤", route: "/admin/users", label: "Users" },
+  { icon: "⚙️", route: "/admin/settings", label: "Settings" },
 ];
 
 // Librarian sidebar

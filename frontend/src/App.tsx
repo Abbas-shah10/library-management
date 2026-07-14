@@ -5,9 +5,10 @@ import { ToastContainer } from "react-toastify";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import { Profile, Home } from "./_root/pages/index";
-import Books from "./_root/pages/Books";
+import Books from "./_root/pages/admin/Books";
 import Dashboard from "./_root/pages/admin/Dashboard";
 import Users from "./_root/pages/admin/Users";
+import Reports from "./_root/pages/admin/Reports";
 
 const App = () => {
   return (
@@ -21,7 +22,6 @@ const App = () => {
         {/*  public routes*/}
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
-          <Route path="/books" element={<Books />} />
           <Route path="/profile/:id" element={<Profile />} />
         </Route>
 
@@ -29,6 +29,8 @@ const App = () => {
         <Route element={<RootLayout />}>
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/users" element={<Users />} />
+          <Route path="/admin/books" element={<Books />} />
+          <Route path="/admin/reports" element={<Reports />} />
         </Route>
       </Routes>
       <ToastContainer />
