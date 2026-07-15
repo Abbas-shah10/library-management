@@ -4,11 +4,14 @@ import Register from "./_auth/Register";
 import { ToastContainer } from "react-toastify";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
-import { Profile, Home } from "./_root/pages/index";
-import Books from "./_root/pages/admin/Books";
-import Dashboard from "./_root/pages/admin/Dashboard";
-import Users from "./_root/pages/admin/Users";
-import Reports from "./_root/pages/admin/Reports";
+import {
+  Profile,
+  Dashboard,
+  Users,
+  Reports,
+  Books,
+  Home,
+} from "./_root/pages/index";
 
 const App = () => {
   return (

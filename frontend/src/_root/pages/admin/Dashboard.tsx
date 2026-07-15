@@ -10,7 +10,6 @@ const Dashboard = () => {
   useEffect(() => {
     fetchBooks();
   }, []);
-  console.log(books);
   return (
     <div className="min-h-screen bg-gray-950 text-white flex w-full">
       {/* Main area */}

@@ -2,13 +2,24 @@ import { useEffect, useState } from "react";
 import TotalBooks from "../../../components/TotalBooks";
 import useBookStore from "../../../store/bookStore";
 import AddBookModal from "./CreateBook";
+import { toast } from "react-toastify";
+import UpdateBookModal from "../../../components/UpdateBook";
 
 const Books = () => {
-  const { books, fetchBooks, createBook } = useBookStore();
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
+  const { books, fetchBooks, createBook, deleteBook } = useBookStore();
   const [modelOpen, setModelOpen] = useState<boolean>(false);
   useEffect(() => {
     fetchBooks();
   }, []);
+
+  const handleDeleteBook = async (bookId: number) => {
+    await deleteBook(bookId);
+    toast("Book deleted successfully!!!");
+    fetchBooks();
+  };
+
   return (
     <div className="min-h-screen bg-gray-950 text-white w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -18,18 +29,21 @@ const Books = () => {
             <h1 className="text-3xl font-bold">Books</h1>
             <p className="text-gray-400 mt-1">Manage your library collection</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg font-medium transition-all" onClick={()=> setModelOpen(true)}>
+          <button
+            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg font-medium transition-all"
+            onClick={() => setModelOpen(true)}
+          >
             Add New Book
           </button>
-            <AddBookModal
-              open={modelOpen}
-              onClose={() => setModelOpen(false)}
-              onSubmit={async (data) => {
-                await createBook(data); // from your bookStore
-                setModelOpen(false);
-                fetchBooks();
-              }}
-            />
+          <AddBookModal
+            open={modelOpen}
+            onClose={() => setModelOpen(false)}
+            onSubmit={async (data) => {
+              await createBook(data); // from your bookStore
+              setModelOpen(false);
+              fetchBooks();
+            }}
+          />
         </div>
 
         {/* Filters & Search */}
@@ -96,10 +110,10 @@ const Books = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-0.5 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">
-                    {book.category}
+                    {book?.category_id}
                   </span>
                   <span className="text-xs text-gray-500">
-                    ISBN: {book.isbn.slice(0, 8)}...
+                    ISBN: {book.isbn}...
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
@@ -107,38 +121,55 @@ const Books = () => {
                     <span className="text-gray-400">
                       Copies:{" "}
                       <span className="text-white font-medium">
-                        {book.copies}
+                        {book.total_copies}
                       </span>
                     </span>
                     <span className="text-gray-400">
                       Available:{" "}
                       <span
-                        className={`font-medium ${book.available > 0 ? "text-emerald-400" : "text-rose-400"}`}
+                        className={`font-medium ${book.available_copies > 0 ? "text-emerald-400" : "text-rose-400"}`}
                       >
-                        {book.available}
+                        {book.available_copies}
                       </span>
                     </span>
                   </div>
                   <span
                     className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      book.available > 0
+                      book.available_copies > 0
                         ? "bg-emerald-500/20 text-emerald-300"
                         : "bg-rose-500/20 text-rose-300"
                     }`}
                   >
-                    {book.available > 0 ? "Available" : "Loaned Out"}
+                    {book.available_copies > 0 ? "Available" : "Loaned Out"}
                   </span>
                 </div>
                 <div className="flex gap-2 pt-1">
                   <button className="flex-1 px-3 py-1.5 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 text-xs rounded-lg transition border border-purple-500/30">
                     View
                   </button>
-                  <button className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs rounded-lg transition">
+                  <button
+                    className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs rounded-lg transition"
+                    onClick={() => {
+                      setSelectedBookId(book.id);
+                      setUpdateModalOpen(true);
+                    }}
+                  >
                     ✏️
                   </button>
-                  <button className="px-3 py-1.5 bg-gray-800 hover:bg-red-500/20 text-gray-300 hover:text-red-300 text-xs rounded-lg transition">
+                  <button
+                    className="px-3 py-1.5 bg-gray-800 hover:bg-red-500/20 text-gray-300 hover:text-red-300 text-xs rounded-lg transition"
+                    onClick={() => handleDeleteBook(book.id)}
+                  >
                     🗑️
                   </button>
+                  <UpdateBookModal
+                    open={updateModalOpen}
+                    bookId={selectedBookId}
+                    onClose={() => {
+                      setUpdateModalOpen(false);
+                      setSelectedBookId(null);
+                    }}
+                  />
                 </div>
               </div>
             </div>

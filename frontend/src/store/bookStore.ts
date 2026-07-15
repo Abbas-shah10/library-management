@@ -40,7 +40,10 @@ const useBookStore = create<BookState>((set) => ({
     try {
       const data = await bookApi.getAllBooks();
       const books = data.data?.books || data.books || data || [];
-      set({ books: Array.isArray(books) ? books : [], loading: false });
+      set({
+        books: Array.isArray(books) ? books : [],
+        loading: false,
+      });
     } catch (err: any) {
       set({
         error: err.response?.data?.message || "Failed to fetch books",
@@ -53,8 +56,8 @@ const useBookStore = create<BookState>((set) => ({
     set({ loading: true, error: null });
     try {
       const data = await bookApi.getBookById(id);
-      const book = data.data?.book || data.book || data;
-      set({ book, loading: false });
+      const fetchedBook = data?.data?.book || data?.book || data;
+      set({ book: fetchedBook, loading: false });
     } catch (err: any) {
       set({
         error: err.response?.data?.message || "Failed to fetch book",

@@ -43,3 +43,44 @@ export const memberLinks = [
   { icon: User, route: "/profile", label: "Profile" },
   { icon: User, route: "/profile", label: "Profile" },
 ];
+
+export const formatDateTime = (dateStr: string): string => {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
+
+// Relative (e.g., "2 hours ago")
+export const formatRelative = (dateStr: string): string => {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+};
+
+export const userStats = [
+  {
+    label: "Total Users",
+    color: "from-purple-500 to-pink-500",
+  },
+  {
+    label: "Admins",
+    color: "from-purple-500 to-purple-600",
+  },
+  {
+    label: "Librarians",
+    color: "from-blue-500 to-blue-600",
+  },
+  {
+    label: "Members",
+    color: "from-emerald-500 to-teal-500",
+  },
+];

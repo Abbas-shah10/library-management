@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/authApi";
 import useAuthStore from "../store/authStore";
 import { BookOpen, Mail, Lock, LogIn } from "lucide-react";
@@ -12,6 +12,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const user = useAuthStore((state) => state.user);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +23,10 @@ const Login = () => {
       const data = await loginUser(email, password);
       toast("User Logged in Successfully");
       setAuth(data.user, data.accessToken, data.refreshToken);
-      navigate("/dashboard");
+      if (!user) return null;
+      if (user.role === "Admin") return <Navigate to="/admin/dashboard" />;
+      if (user.role === "Member") return <Navigate to="/member/dashboard" />;
+      return <Navigate to="/librarian/dashboard" />;
     } catch {
       setError("Invalid email or password");
     } finally {
@@ -31,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
           <div className="flex flex-col items-center mb-8">
