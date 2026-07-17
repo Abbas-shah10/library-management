@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import * as bookApi from "../api/bookApi";
+import type { User } from "./userStore";
 
 interface Book {
   id: number;
@@ -14,6 +15,8 @@ interface Book {
   active: boolean;
   createdAt?: string;
   updatedAt?: string;
+  user_id: number | null;
+  User: User;
 }
 
 interface BookState {
@@ -39,7 +42,13 @@ const useBookStore = create<BookState>((set) => ({
     set({ loading: true, error: null });
     try {
       const data = await bookApi.getAllBooks();
-      const books = data.data?.books || data.books || data || [];
+      const books =
+        data.data?.books ||
+        data.books ||
+        data.bookWithUser ||
+        data?.User ||
+        data ||
+        [];
       set({
         books: Array.isArray(books) ? books : [],
         loading: false,

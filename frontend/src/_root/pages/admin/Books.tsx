@@ -13,7 +13,6 @@ const Books = () => {
   useEffect(() => {
     fetchBooks();
   }, []);
-
   const handleDeleteBook = async (bookId: number) => {
     await deleteBook(bookId);
     toast("Book deleted successfully!!!");
@@ -102,18 +101,20 @@ const Books = () => {
                 </div>
               </div>
               <div className="p-4 space-y-3">
-                <div>
+                <div className="flex justify-between">
                   <h3 className="font-semibold text-sm truncate">
                     {book.title}
                   </h3>
-                  <p className="text-xs text-gray-400 mt-0.5">{book.author}</p>
+                  <p className="text-xs text-end text-gray-400 mt-0.5">
+                    UserId: {book?.user_id}
+                  </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="px-2 py-0.5 bg-purple-500/20 text-purple-300 text-xs rounded-full border border-purple-500/30">
                     {book?.category_id}
                   </span>
                   <span className="text-xs text-gray-500">
-                    ISBN: {book.isbn}...
+                    ISBN: {book.isbn.toString().slice(1)}...
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs">

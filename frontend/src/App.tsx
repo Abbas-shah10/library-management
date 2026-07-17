@@ -11,6 +11,7 @@ import {
   Reports,
   Books,
   Home,
+  Members,
 } from "./_root/pages/index";
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/books" element={<Books />} />
           <Route path="/admin/reports" element={<Reports />} />
+          <Route path="/admin/members" element={<Members />} />
         </Route>
       </Routes>
       <ToastContainer />

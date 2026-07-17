@@ -9,7 +9,10 @@ import Reservation from "./reservation.model.js";
 import User from './user.model.js'
 import RefreshToken from './refreshToken.model.js'
 
-User.belongsTo(Member, { foreignKey: { name: "member_id", allowNull: true } });
+User.belongsTo(Member, { foreignKey: { name: "member_id", allowNull: true } })
+
+User.hasMany(Book, { foreignKey: "user_id", allowNull: true })
+Book.belongsTo(User, { foreignKey: "user_id" })
 
 User.hasMany(RefreshToken, { foreignKey: "user_id" });
 RefreshToken.belongsTo(User, { foreignKey: "user_id" });

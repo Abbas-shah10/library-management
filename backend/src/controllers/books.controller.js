@@ -1,35 +1,33 @@
-import { Book } from '../models/associations.js'
+import { Book, User } from '../models/associations.js'
 
 const createBook = async (req, res) => {
   try {
     const { title, isbn, publisher, publication_year, total_copies, shelf_location } = req.body;
+    const userId = req.user.id;
 
     if (!title | !isbn | !publisher) {
       res.status(400).json({ message: "All the fields are required " })
     }
-
-    const book = await Book.findOne({ where: { title } })
-
-    if (book) {
-      res.status(400).json({ message: "Book with same details or title is present" })
-    }
-
     const newBook = await Book.create({
       title,
       isbn,
       publisher,
       publication_year,
       total_copies,
-      shelf_location
+      shelf_location,
+      user_id: userId,
     })
 
-    if (newBook) {
-      res.status(201).json({ message: "Book created Successfully!", data: { newBook } })
+    const bookWithUser = await Book.findByPk(newBook.id, {
+      include: { model: User, attributes: ['username', 'email'] }
+    })
+
+    if (bookWithUser) {
+
+      res.status(201).json({ message: "Book created Successfully!", data: bookWithUser });
     } else {
-      res.status(400).json({ message: "Error creating the book" })
+      res.status(400).json({ message: "Error creating book" })
     }
-
-
   } catch (error) {
     console.error("Logout error:", error);
     res.status(500).json({ message: "Something went wrong", error: error.message });

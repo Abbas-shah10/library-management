@@ -5,5 +5,6 @@ import Users from "./admin/Users";
 import Dashboard from "./admin/Dashboard";
 import Reports from "./admin/Reports";
 import CreateBook from "./admin/CreateBook";
+import Members from "./admin/Members";
 
-export { Home, Profile, Books, Dashboard, Users, CreateBook, Reports };
+export { Home, Profile, Books, Dashboard, Users, CreateBook, Reports, Members };

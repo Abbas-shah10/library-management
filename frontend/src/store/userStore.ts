@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import * as userApi from "../api/userApi";
-interface User {
+export interface User {
   id: number;
   username: string;
   email: string;
@@ -8,7 +8,7 @@ interface User {
   role: "Admin" | "Member" | "Librarian";
   member_id: null | number;
   isActive: boolean;
-  created_at?: string;
+  created_at: string;
 }
 
 interface UserState {

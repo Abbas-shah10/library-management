@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Reports = () => {
-  return <div>Reports</div>;
+  return <div>hello</div>;
 };
 
 export default Reports;
