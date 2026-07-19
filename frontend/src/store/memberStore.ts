@@ -6,7 +6,7 @@ interface Member {
   email: string;
   phone: string;
   address: string;
-  membership_date?: string;
+  membership_date: string;
   membership_type: string;
   max_books_allowed: string;
   createdAt: string;

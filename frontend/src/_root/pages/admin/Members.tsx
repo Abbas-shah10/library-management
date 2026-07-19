@@ -3,18 +3,21 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const Members = () => {
-  const { fetchAllMembers, members, deleteMember } = useMemberStore();
+  const { fetchAllMembers, members, deleteMember, createMember } =
+    useMemberStore();
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     address: "",
-    membership_type: "basic",
+    membership_type: "Student",
+    membership_date: "",
     max_books_allowed: 5,
   });
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
 
   useEffect(() => {
     fetchAllMembers();
@@ -29,11 +32,30 @@ const Members = () => {
     total: members.length,
     student: members.filter((m) => m.membership_type === "Student").length,
     faculty: members.filter((m) => m.membership_type === "Faculty").length,
-    public: members.filter((m) => m.membership_type === "public").length,
+    public: members.filter((m) => m.membership_type === "Public").length,
   };
 
-  const handleChange = () => {};
-  const handleSubmit = () => {};
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    e.preventDefault();
+    setFormData((prevForm) => ({
+      ...prevForm,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const member = await createMember(formData);
+
+      if (!member) return new Error();
+
+      toast("New Member created successfylly");
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div className="min-h-screen p-8 w-full bg-gray-950 text-white ">
@@ -274,7 +296,7 @@ const Members = () => {
             ) : (
               members?.map((member) => (
                 <tr
-                  key={member?.id}
+                  key={member?.name}
                   className="hover:bg-gray-50 transition cursor-pointer"
                 >
                   <td className="py-4 px-6">
@@ -297,7 +319,7 @@ const Members = () => {
                   <td className="py-4 px-6">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        member.membership_type === "student"
+                        member.membership_type === "Student"
                           ? "bg-purple-100 text-purple-700"
                           : "bg-green-100 text-green-700"
                       }`}
@@ -315,6 +337,7 @@ const Members = () => {
                     <button
                       className="text-blue-500 hover:text-blue-700 mr-3 transition"
                       title="Edit"
+                      onClick={() => setIsEdit(true)}
                     >
                       <svg
                         className="h-5 w-5"
@@ -385,7 +408,7 @@ const Members = () => {
               </button>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 text-black">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Name *
@@ -425,7 +448,7 @@ const Members = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black outline-none"
                     placeholder="1234567890"
                   />
                 </div>
@@ -434,13 +457,13 @@ const Members = () => {
                     Membership *
                   </label>
                   <select
-                    name="membership_type"
                     value={formData.membership_type}
                     onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-700"
                   >
-                    <option value="basic">Basic</option>
-                    <option value="premium">Premium</option>
+                    <option value="Student">Student</option>
+                    <option value="Public">Public</option>
+                    <option value="Faculty">Faculty</option>
                   </select>
                 </div>
               </div>
@@ -453,7 +476,7 @@ const Members = () => {
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-700"
                   placeholder="123 Main St"
                 />
               </div>
@@ -468,7 +491,21 @@ const Members = () => {
                   onChange={handleChange}
                   min="1"
                   required
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-700"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Membership date
+                </label>
+                <input
+                  type="date"
+                  name="membership_date"
+                  value={formData.membership_date}
+                  onChange={handleChange}
+                  min="1"
+                  required
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-700"
                 />
               </div>
               <div className="flex gap-3 pt-2">
@@ -484,6 +521,152 @@ const Members = () => {
                   className="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition font-medium"
                 >
                   Add Member
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Member Modal */}
+      {isEdit && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg">
+            <div className="flex justify-between items-center p-6 border-b">
+              <h2 className="text-xl font-bold text-gray-800">Update Member</h2>
+              <button
+                onClick={() => setIsEdit(false)}
+                className="text-gray-400 hover:text-gray-600 transition"
+              >
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4 text-black">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    placeholder="john@example.com"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Phone
+                  </label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black outline-none"
+                    placeholder="1234567890"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Membership *
+                  </label>
+                  <select
+                    value={formData.membership_type}
+                    onChange={handleChange}
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-700"
+                  >
+                    <option value="Student">Student</option>
+                    <option value="Public">Public</option>
+                    <option value="Faculty">Faculty</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-700"
+                  placeholder="123 Main St"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Max Books Allowed *
+                </label>
+                <input
+                  type="number"
+                  name="max_books_allowed"
+                  value={formData.max_books_allowed}
+                  onChange={handleChange}
+                  min="1"
+                  required
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-700"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Membership date
+                </label>
+                <input
+                  type="date"
+                  name="membership_date"
+                  value={formData.membership_date}
+                  onChange={handleChange}
+                  min="1"
+                  required
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-gray-700"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsEdit(false)}
+                  className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition font-medium"
+                >
+                  Update Member
                 </button>
               </div>
             </form>
