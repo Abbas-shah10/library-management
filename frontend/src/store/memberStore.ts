@@ -2,6 +2,7 @@ import { create } from "zustand";
 import * as memberApi from "../api/memberApi";
 
 interface Member {
+  id: number;
   name: string;
   email: string;
   phone: string;
@@ -20,6 +21,7 @@ interface MemberState {
   createMember: (payload: Partial<Member>) => Promise<void>;
   fetchAllMembers: () => Promise<void>;
   deleteMember: (memberId: number) => Promise<void>;
+  fetchMemberById: (memberId: number) => Promise<void>;
 }
 
 const useMemberStore = create<MemberState>((set) => ({
@@ -78,6 +80,23 @@ const useMemberStore = create<MemberState>((set) => ({
     } catch (err: any) {
       set({
         error: err.response?.data?.message || "Failed to create book",
+        loading: false,
+      });
+    }
+  },
+
+  fetchMemberById: async (memberId: number) => {
+    set({ loading: true, error: null });
+    try {
+      const data = memberApi.fetchMemberById(memberId);
+
+      set({
+        member: data?.member || data.data || data.data?.member || [],
+        loading: false,
+      });
+    } catch (error: any) {
+      set({
+        error: error.response?.data?.message || "Failed to create book",
         loading: false,
       });
     }

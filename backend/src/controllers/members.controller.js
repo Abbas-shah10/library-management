@@ -108,4 +108,21 @@ const fetchAllMembers = async (req, res) => {
   }
 }
 
-export { createMembers, updateMembers, deleteMemberById, fetchAllMembers };
+const fetchMemberById = async (req, res) => {
+  try {
+    const { memberId } = req.params;
+
+    const member = await Member.findByPk(memberId)
+
+    if (member) {
+      return res.status(200).json({ message: "Member Fetched Successfully", member })
+    } else {
+      return res.status(404).json({ message: "Member not found!" })
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: "Something went wrong", error: error.message });
+  }
+}
+
+export { createMembers, updateMembers, deleteMemberById, fetchAllMembers, fetchMemberById };

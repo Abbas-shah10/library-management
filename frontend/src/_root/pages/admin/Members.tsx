@@ -3,8 +3,14 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const Members = () => {
-  const { fetchAllMembers, members, deleteMember, createMember } =
-    useMemberStore();
+  const {
+    fetchAllMembers,
+    members,
+    deleteMember,
+    createMember,
+    fetchMemberById,
+    member,
+  } = useMemberStore();
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -21,7 +27,25 @@ const Members = () => {
 
   useEffect(() => {
     fetchAllMembers();
+    if (isEdit && member?.id) {
+      fetchMemberById(member?.id);
+    }
   }, []);
+
+  useEffect(() => {
+    if (member) {
+      setFormData({
+        name: member.name,
+        email: member.email,
+        phone: member.phone,
+        address: member.address,
+        membership_type: member.membership_type,
+        membership_date: member.membership_date,
+        max_books_allowed: Number(member.max_books_allowed),
+      });
+    }
+  }, [member]);
+  console.log(member);
 
   const handleDelete = async (id: number) => {
     await deleteMember(id);

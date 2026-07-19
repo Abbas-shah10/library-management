@@ -1,7 +1,6 @@
 import api from "./axiosInstance";
 
 interface PropsPayload {
-  name: string;
   email: string;
   phone: string;
   address: string;
@@ -27,5 +26,10 @@ export const deleteMember = async (memberId: number) => {
 
 export const updateMember = async (id: number, payload: PropsPayload) => {
   const { data } = await api.put(`/members/${id}`, payload);
+  return data;
+};
+
+export const fetchMemberById = async (memberId: number) => {
+  const { data } = await api.get(`/members/${memberId}`);
   return data;
 };
