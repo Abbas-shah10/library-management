@@ -2,14 +2,26 @@ import { useEffect } from "react";
 import useAuthStore from "../../../store/authStore";
 import useBookStore from "../../../store/bookStore";
 import TotalBooks from "../../../components/TotalBooks";
+import useLoanStore from "@/store/loanStore";
+import TotalLoans from "@/components/TotalLoans";
+import TotalMembers from "@/components/TotalMembers";
+import useMemberStore from "@/store/memberStore";
+import TotalUsers from "@/components/TotalUsers";
+import useUserStore from "@/store/userStore";
 
 const Dashboard = () => {
+  const { loans, fetchLoans } = useLoanStore();
+  const { users, fetchUsers } = useUserStore();
+  const { members, fetchAllMembers } = useMemberStore();
   const { user } = useAuthStore();
   const { fetchBooks, books } = useBookStore();
-
   useEffect(() => {
     fetchBooks();
+    fetchLoans();
+    fetchAllMembers();
+    fetchUsers();
   }, []);
+
   return (
     <div className="min-h-screen bg-gray-950 text-white flex w-full">
       {/* Main area */}
@@ -36,6 +48,9 @@ const Dashboard = () => {
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <TotalBooks books={books} />
+            <TotalLoans loans={loans} />
+            <TotalMembers members={members} />
+            <TotalUsers users={users} />
           </div>
 
           {/* Charts row */}
@@ -124,55 +139,26 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    {
-                      member: "Alice Johnson",
-                      book: "The Great Gatsby",
-                      date: "2024-01-15",
-                      due: "2024-02-15",
-                      status: "Active",
-                    },
-                    {
-                      member: "Bob Smith",
-                      book: "1984",
-                      date: "2024-01-10",
-                      due: "2024-02-10",
-                      status: "Overdue",
-                    },
-                    {
-                      member: "Carol White",
-                      book: "Dune",
-                      date: "2024-01-20",
-                      due: "2024-02-20",
-                      status: "Active",
-                    },
-                    {
-                      member: "David Brown",
-                      book: "Sapiens",
-                      date: "2024-01-05",
-                      due: "2024-02-05",
-                      status: "Returned",
-                    },
-                  ].map((row, i) => (
+                  {loans.map((loan) => (
                     <tr
-                      key={i}
+                      key={loan?.id}
                       className="border-b border-gray-800/50 hover:bg-gray-800/30"
                     >
-                      <td className="p-4 text-gray-200">{row.member}</td>
-                      <td className="p-4 text-gray-200">{row.book}</td>
-                      <td className="p-4 text-gray-400">{row.date}</td>
-                      <td className="p-4 text-gray-400">{row.due}</td>
+                      <td className="p-4 text-gray-200">{loan.Member?.name}</td>
+                      <td className="p-4 text-gray-200">{loan.Book?.title}</td>
+                      <td className="p-4 text-gray-400">{loan.loan_date}</td>
+                      <td className="p-4 text-gray-400">{loan.due_date}</td>
                       <td className="p-4">
                         <span
                           className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                            row.status === "Active"
+                            loan.status === "active"
                               ? "bg-emerald-500/20 text-emerald-300"
-                              : row.status === "Overdue"
+                              : loan.status === "overdue"
                                 ? "bg-rose-500/20 text-rose-300"
                                 : "bg-gray-700 text-gray-300"
                           }`}
                         >
-                          {row.status}
+                          {loan.status}
                         </span>
                       </td>
                     </tr>

@@ -7,7 +7,7 @@ import Reports from "./admin/Reports";
 import CreateBook from "./admin/CreateBook";
 import Members from "./admin/Members";
 import Loans from "./admin/Loans";
-
+import Settings from "./admin/Settings";
 export {
   Home,
   Profile,
@@ -18,4 +18,5 @@ export {
   Reports,
   Members,
   Loans,
+  Settings,
 };

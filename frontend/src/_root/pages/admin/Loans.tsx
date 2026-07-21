@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import useLoanStore from "@/store/loanStore";
+import React, { useEffect, useState } from "react";
 
 const Loans = () => {
-  const [loans, setLoans] = useState([]);
+  const { loans, fetchLoans } = useLoanStore();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<string>("borrow");
   const [form, setForm] = useState({ memberId: "", bookId: "", dueDate: "" });
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    fetchLoans();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -36,16 +41,16 @@ const Loans = () => {
 
   const filteredLoans = loans.filter(
     (l) =>
-      l?.member?.name?.toLowerCase().includes(search.toLowerCase()) ||
-      l?.book?.title?.toLowerCase().includes(search.toLowerCase()),
+      l?.Member?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      l?.Book?.title?.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
     <div className="min-h-screen  p-8 w-full bg-gray-950 text-white">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Loans Management</h1>
-        <p className="text-gray-500 mt-1">Track book borrowing and returns</p>
+        <h1 className="text-3xl font-bold text-gray-200">Loans Management</h1>
+        <p className="text-gray-300 mt-1">Track book borrowing and returns</p>
       </div>
 
       {/* Stats */}
@@ -62,7 +67,7 @@ const Loans = () => {
             </div>
             <div className="h-14 w-14 rounded-full bg-gray-800 flex items-center justify-center">
               <svg
-                className="h-7 w-7 text-white"
+                className="h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -70,8 +75,8 @@ const Loans = () => {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                  strokeWidth={1.5}
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                 />
               </svg>
             </div>
@@ -93,7 +98,7 @@ const Loans = () => {
             </div>
             <div className="h-14 w-14 rounded-full bg-gray-800 flex items-center justify-center">
               <svg
-                className="h-7 w-7 text-white"
+                className="h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -101,8 +106,8 @@ const Loans = () => {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                  strokeWidth={1.5}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
             </div>
@@ -124,7 +129,7 @@ const Loans = () => {
             </div>
             <div className="h-14 w-14 rounded-full bg-gray-800 flex items-center justify-center">
               <svg
-                className="h-7 w-7 text-white"
+                className="h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -132,8 +137,8 @@ const Loans = () => {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                  strokeWidth={1.5}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                 />
               </svg>
             </div>
@@ -151,7 +156,7 @@ const Loans = () => {
           <input
             type="text"
             placeholder="Search by member or book..."
-            className="w-full bg-gray-900 border border-gray-800 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="w-full bg-gray-900 border border-gray-800 rounded-lg pl-10 pr-4 py-2.5 text-sm text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -255,27 +260,23 @@ const Loans = () => {
                 <tr key={loan?.id} className="hover:bg-gray-50 transition">
                   <td className="py-4 px-6">
                     <span className="font-medium text-gray-800">
-                      {loan?.member?.name || loan?.memberId}
+                      {loan?.Member?.name || loan?.member_id}
                     </span>
                   </td>
                   <td className="py-4 px-6 text-gray-600 max-w-[200px] truncate">
-                    {loan?.book?.title || loan?.bookId}
+                    {loan?.Book?.title || loan?.book_id}
                   </td>
                   <td className="py-4 px-6 text-gray-600">
                     {new Date(
-                      loan?.loan_date || loan?.loanDate,
+                      loan?.loan_date || loan?.loan_date,
                     ).toLocaleDateString()}
                   </td>
                   <td className="py-4 px-6 text-gray-600">
-                    {new Date(
-                      loan?.due_date || loan?.dueDate,
-                    ).toLocaleDateString()}
+                    {new Date(loan?.due_date).toLocaleDateString()}
                   </td>
                   <td className="py-4 px-6 text-gray-600">
-                    {loan?.return_date || loan?.returnDate
-                      ? new Date(
-                          loan?.return_date || loan?.returnDate,
-                        ).toLocaleDateString()
+                    {loan?.return_date
+                      ? new Date(loan?.return_date).toLocaleDateString()
                       : "—"}
                   </td>
                   <td className="py-4 px-6">
@@ -347,7 +348,7 @@ const Loans = () => {
                   value={form.memberId}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2.5 rounded-lg border text-black border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="Enter member ID"
                 />
               </div>
@@ -361,7 +362,7 @@ const Loans = () => {
                   value={form.bookId}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2.5 rounded-lg border text-black border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="Enter book ID"
                 />
               </div>
