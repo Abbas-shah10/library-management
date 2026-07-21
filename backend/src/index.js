@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from 'cors'
 // Utils
 import sequelize from "./db/connectDb.js";
-import { memberRoutes, userRoutes, bookRoutes, loanRoutes } from "./routes/index.js";
+import { memberRoutes, userRoutes, bookRoutes, loanRoutes, authorRoutes } from "./routes/index.js";
 dotenv.config();
 
 const app = express();
@@ -35,6 +35,7 @@ app.use("/api/v1/users", userRoutes)
 app.use('/api/v1/books', bookRoutes)
 app.use('/api/v1/members', memberRoutes)
 app.use("/api/v1/loans", loanRoutes);
+app.use('/api/v1/authors', authorRoutes);
 app.listen(PORT, () => {
   console.log(`App is listening on port : ${PORT}`);
 });

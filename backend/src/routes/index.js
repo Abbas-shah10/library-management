@@ -2,4 +2,5 @@ import memberRoutes from './members.routes.js'
 import userRoutes from './user.route.js';
 import bookRoutes from './books.routes.js'
 import loanRoutes from './loans.routes.js'
-export { memberRoutes, userRoutes, bookRoutes, loanRoutes };
+import authorRoutes from './author.routes.js'
+export { memberRoutes, userRoutes, bookRoutes, loanRoutes, authorRoutes };
