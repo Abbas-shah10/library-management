@@ -1,7 +1,14 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { adminLinks } from "../constants";
+import { adminLinks, librarianLinks, memberLinks } from "../constants";
 import type { INavLink } from "../types";
 import useAuthStore from "../store/authStore";
+import Login from "@/_auth/Login";
+
+const roleLinks: Record<string, INavLink[]> = {
+  Admin: adminLinks,
+  Librarian: librarianLinks,
+  Member: memberLinks,
+};
 
 const LeftSidebar = () => {
   const { user } = useAuthStore();
@@ -11,8 +18,8 @@ const LeftSidebar = () => {
     <nav className="fixed left-0 h-screen w-[260px] bg-[#1a1a23] border-r border-gray-800 p-4 max-sm:hidden">
       <div className="flex flex-col gap-11">
         <ul className="flex flex-col gap-6">
-          {user.role === "Admin" &&
-            adminLinks.map((link: INavLink) => {
+          {user ? (
+            roleLinks[user.role]?.map((link) => {
               const isActive = pathname === link.route;
               return (
                 <li
@@ -28,7 +35,15 @@ const LeftSidebar = () => {
                   </NavLink>
                 </li>
               );
-            })}
+            })
+          ) : (
+            // Show login link when NOT logged in
+            <li className="leftsidebar-link group">
+              <NavLink to="/login" className="flex gap-4 items-center p-4">
+                <Login /> Login
+              </NavLink>
+            </li>
+          )}
         </ul>
       </div>
     </nav>
