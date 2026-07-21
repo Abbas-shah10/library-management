@@ -21,7 +21,8 @@ interface MemberState {
   createMember: (payload: Partial<Member>) => Promise<void>;
   fetchAllMembers: () => Promise<void>;
   deleteMember: (memberId: number) => Promise<void>;
-  fetchMemberById: (memberId: number) => Promise<void>;
+  fetchMember: (memberId: number) => Promise<void>;
+  updateMember: (id: number, payload: Partial<Member>) => Promise<void>;
 }
 
 const useMemberStore = create<MemberState>((set) => ({
@@ -85,15 +86,35 @@ const useMemberStore = create<MemberState>((set) => ({
     }
   },
 
-  fetchMemberById: async (memberId: number) => {
+  fetchMember: async (memberId: number) => {
     set({ loading: true, error: null });
     try {
-      const data = memberApi.fetchMemberById(memberId);
-
+      const data = await memberApi.fetchMemberById(memberId);
+      const fetchedMember = data.member || data.data.member || data || [];
+      console.log(data);
       set({
-        member: data?.member || data.data || data.data?.member || [],
+        member: fetchedMember,
         loading: false,
       });
+    } catch (error: any) {
+      set({
+        error: error.response?.data?.message || "Failed to create book",
+        loading: false,
+      });
+    }
+  },
+
+  updateMember: async (id, payload) => {
+    set({ loading: true, error: null });
+    try {
+      const data = await memberApi.updateMember(id, payload);
+      set((state) => ({
+        books: state.members.map((m) =>
+          m.id === id ? { ...m, ...(data.data || data) } : m,
+        ),
+        book: state.member?.id === id ? data.data || data : state.member,
+        loading: false,
+      }));
     } catch (error: any) {
       set({
         error: error.response?.data?.message || "Failed to create book",

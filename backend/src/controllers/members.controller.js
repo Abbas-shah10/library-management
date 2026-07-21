@@ -81,7 +81,7 @@ const deleteMemberById = async (req, res) => {
     const member = await Member.findByPk(memberId);
 
     if (member) {
-      await member.destroy(memberId)
+      await member.destroy()
       return res.status(200).json({ message: "Member deleted successfully" })
     } else {
       return res.status(404).json({ message: "Member with id not found" })
