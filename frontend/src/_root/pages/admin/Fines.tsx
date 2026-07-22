@@ -11,7 +11,6 @@ const Fines = () => {
   const [payAmount, setPayAmount] = useState("");
   const [selectedFine, setSelectedFine] = useState<any>(null);
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
-
   useEffect(() => {
     fetchAllFines();
   }, []);
@@ -312,11 +311,13 @@ const Fines = () => {
         </div>
       )}
 
-      <CreateFineModal
-        open={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-        onSuccess={() => fetchAllFines()}
-      />
+      {showCreateModal && (
+        <CreateFineModal
+          open={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          onSuccess={() => fetchAllFines()}
+        />
+      )}
     </div>
   );
 };

@@ -18,7 +18,6 @@ const CreateFineModal = ({
     loan_id: "",
     amount: "",
     fine_date: "",
-    paid: false,
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -35,7 +34,6 @@ const CreateFineModal = ({
       await createFine({
         loan_id: form.loan_id,
         amount: form.amount,
-        paid: form.paid,
       });
       toast.success("Fine created successfully");
       onSuccess();
