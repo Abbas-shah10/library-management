@@ -40,7 +40,7 @@ const getAllFines = async (req, res) => {
     });
 
     if (fines) {
-      res.status(201).json({ message: "All Fines is Fetched successfully", data: { fines } })
+      res.status(200).json({ message: "All Fines is Fetched successfully", data: { fines } })
     } else {
       res.status(400).json({ message: "Could not fetched all fines" })
     }
@@ -53,14 +53,15 @@ const getAllFines = async (req, res) => {
 
 const getFinesByLoan = async (req, res) => {
   try {
-    const fine = await Fine.findByPk({ where: { loan_id: req.params.loanId } }, {
+    const { loanId } = req.params;
+    const fines = await Fine.findAll({ where: { loan_id: loanId } }, {
       include: { model: Loan, include: [Book, Member] },
       order: [['fine_date', 'DESC']]
     })
 
 
     if (fines) {
-      res.status(201).json({ message: "Fine Fetched successfully", data: { fine } })
+      res.status(201).json({ message: "Fine Fetched successfully", data: { fines } })
     } else {
       res.status(400).json({ message: "Could not fetched the fine" })
     }
@@ -76,12 +77,13 @@ const getSingleFine = async (req, res) => {
     include: { model: Loan, include: [Book, Member] },
   });
   if (!fine) return res.status(404).json({ message: "Fine not found" });
-  res.json(fine);
+
+  res.json({ data: fine });
 };
 
 const getMemberFine = async (req, res) => {
   const fines = await Fine.findAll({
-    include: { model: Loan, where: { member_id: req.params.memeberId }, include: [Book] },
+    include: { model: Loan, where: { member_id: req.params.memberId }, include: [Book] },
     order: [['fine_date', "DESC"]]
   })
 

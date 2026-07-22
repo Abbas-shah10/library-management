@@ -7,7 +7,7 @@ const Loans = () => {
   const [modalType, setModalType] = useState<string>("borrow");
   const [form, setForm] = useState({ memberId: "", bookId: "", dueDate: "" });
   const [search, setSearch] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     fetchLoans();

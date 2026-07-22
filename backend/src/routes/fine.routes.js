@@ -6,12 +6,12 @@ const router = Router();
 
 // CRUD
 router.route("/").post(authenticate, isAdmin, createFine)
-router.route("/").post(authenticate, isAdmin, getAllFines)
+router.route("/").get(authenticate, isAdmin, getAllFines)
 router.route("/:id").get(authenticate, isAdmin, getSingleFine);
 
 
 // By relationships
-router.route("/loan/:id").get(authenticate, getFinesByLoan)
+router.route("/loan/:loanId").get(authenticate, getFinesByLoan)
 router.route('/member/:memberId').get(authenticate, getMemberFine);
 
 // Actions

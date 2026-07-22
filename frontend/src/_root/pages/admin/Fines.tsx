@@ -1,82 +1,45 @@
+import CreateFineModal from "@/components/CreateFineModal";
+import useFineStore from "@/store/fineStore";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const Fines = () => {
-  const [fines, setFines] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { fetchAllFines, fines, waiveFine } = useFineStore();
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [payAmount, setPayAmount] = useState("");
   const [selectedFine, setSelectedFine] = useState<any>(null);
+  const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
 
   useEffect(() => {
-    fetchFines();
+    fetchAllFines();
   }, []);
 
-  const fetchFines = async () => {
-    try {
-      const res = await fetch("/api/v1/fines");
-      const data = await res.json();
-      setFines(data.fines || data.data || data || []);
-    } catch (err) {
-      toast.error("Failed to fetch fines");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const totalFines = fines.length;
-  const unpaidFines = fines.filter((f) => !f.paid).length;
-  const paidFines = fines.filter((f) => f.paid).length;
-  const totalAmount = fines.reduce(
-    (sum, f) => sum + parseFloat(f.amount || 0),
-    0,
-  );
+  const totalFines = fines?.length;
+  const unpaidFines = fines?.filter((f) => !f.paid).length;
+  const paidFines = fines?.filter((f) => f.paid).length;
+  const totalAmount = fines?.reduce((sum, f) => sum + parseFloat(f.amount), 0);
   const unpaidAmount = fines
-    .filter((f) => !f.paid)
-    .reduce((sum, f) => sum + parseFloat(f.amount || 0), 0);
+    ?.filter((f) => !f.paid)
+    ?.reduce((sum, f) => sum + parseFloat(f.amount), 0);
 
   const filteredFines = fines.filter(
     (f) =>
-      f.Loan?.Member?.name?.toLowerCase().includes(search.toLowerCase()) ||
-      f.Loan?.Book?.title?.toLowerCase().includes(search.toLowerCase()),
+      f?.Loan?.Member?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      f?.Loan?.Book?.title?.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const handlePayFine = async (id: number) => {
-    try {
-      const res = await fetch(`/api/v1/fines/${id}/pay`, { method: "PATCH" });
-      if (!res.ok) throw new Error();
-      toast.success("Fine marked as paid");
-      fetchFines();
-    } catch {
-      toast.error("Failed to pay fine");
-    }
-  };
+  const handlePayFine = async (id: number) => {};
 
-  const handlePayAll = async (memberId: number) => {
-    try {
-      const res = await fetch(`/api/v1/fines/pay-all/${memberId}`, {
-        method: "POST",
-      });
-      if (!res.ok) throw new Error();
-      toast.success("All fines paid");
-      fetchFines();
-    } catch {
-      toast.error("Failed to pay fines");
-    }
-  };
+  const handlePayAll = async (memberId: number) => {};
 
   const handleWaive = async (id: number) => {
-    if (!confirm("Are you sure you want to waive this fine?")) return;
     try {
-      const res = await fetch(`/api/v1/fines/${id}/waive`, {
-        method: "DELETE",
-      });
-      if (!res.ok) throw new Error();
-      toast.success("Fine waived");
-      fetchFines();
-    } catch {
-      toast.error("Failed to waive fine");
+      await waiveFine(id);
+      toast("Fine successfully Waived");
+    } catch (error: any) {
+      console.log(error.message || "Could not waive fine");
     }
   };
 
@@ -177,14 +140,12 @@ const Fines = () => {
             />
           </svg>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-400">
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-red-400" /> Unpaid
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-green-400" /> Paid
-          </div>
-        </div>
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-medium transition"
+        >
+          + Create Fine
+        </button>
       </div>
 
       {/* Table */}
@@ -350,6 +311,12 @@ const Fines = () => {
           </div>
         </div>
       )}
+
+      <CreateFineModal
+        open={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSuccess={() => fetchAllFines()}
+      />
     </div>
   );
 };
