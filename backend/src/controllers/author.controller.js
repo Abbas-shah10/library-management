@@ -1,9 +1,9 @@
-import { Author } from '../models/associations.js'
+import { Author, Book } from '../models/associations.js'
 
 
 const createAuthor = async (req, res) => {
   try {
-    const { name, bio } = req.body;
+    const { name, bio, bookIds } = req.body;
 
     if (!name || !bio) {
       res.status(400).json({ message: "All fields are required" })
@@ -13,6 +13,11 @@ const createAuthor = async (req, res) => {
       name: name,
       bio: bio
     })
+
+    if (bookIds?.length) {
+      const books = await Book.findAll({ where: { bookIds } })
+      await author.setBooks(books);
+    }
 
     if (newAuthor) {
       res.status(201).json({ message: "New Author created successfully", data: { newAuthor } })

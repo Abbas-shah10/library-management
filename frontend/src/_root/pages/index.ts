@@ -8,6 +8,7 @@ import CreateBook from "./admin/CreateBook";
 import Members from "./admin/Members";
 import Loans from "./admin/Loans";
 import Settings from "./admin/Settings";
+import Fines from "./admin/Fines";
 export {
   Home,
   Profile,
@@ -19,4 +20,5 @@ export {
   Members,
   Loans,
   Settings,
+  Fines,
 };

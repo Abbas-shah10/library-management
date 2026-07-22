@@ -1,13 +1,14 @@
-import { Book, User } from '../models/associations.js'
+import { Author, Book, User } from '../models/associations.js'
 
 const createBook = async (req, res) => {
   try {
-    const { title, isbn, publisher, publication_year, total_copies, shelf_location } = req.body;
+    const { title, isbn, publisher, publication_year, total_copies, shelf_location, authorIds } = req.body;
     const userId = req.user.id;
 
     if (!title | !isbn | !publisher) {
       res.status(400).json({ message: "All the fields are required " })
     }
+
     const newBook = await Book.create({
       title,
       isbn,
@@ -18,13 +19,18 @@ const createBook = async (req, res) => {
       user_id: userId,
     })
 
-    const bookWithUser = await Book.findByPk(newBook.id, {
-      include: { model: User, attributes: ['username', 'email'] }
+    if (authorIds.length) {
+      const authors = await Author.findAll({ where: { authorIds } })
+      await Book.setAuthors(authors)
+    }
+
+    const bookWithAuthor = await Book.findByPk(newBook.id, {
+      include: { model: Author }
     })
 
-    if (bookWithUser) {
+    if (bookWithAuthor) {
 
-      res.status(201).json({ message: "Book created Successfully!", data: bookWithUser });
+      res.status(201).json({ message: "Book created Successfully!", data: { bookWithAuthor } });
     } else {
       res.status(400).json({ message: "Error creating book" })
     }
@@ -37,7 +43,7 @@ const createBook = async (req, res) => {
 const updateBook = async (req, res) => {
   try {
     const { bookId } = req.params;
-    const { title, isbn, publisher, publication_year, total_copies, shelf_location } = req.body;
+    const { title, isbn, publisher, publication_year, total_copies, shelf_location, authorIds } = req.body;
 
     let fieldsName = ["title", "isbn", "publisher", "publication_year", "total_copies", "shelf_location"];
 
@@ -60,8 +66,15 @@ const updateBook = async (req, res) => {
 
     const book = await Book.findByPk(bookId);
 
+    if (authorIds) {
+      const authors = await Author.findAll({ where: { authorIds } })
+      await Book.setAuthors(authors)
+    }
+
     if (book) {
       await book.update(updateData)
+
+      const res = await Book.findByPk(book.id, { include: Author });
 
       return res.status(200).json({ message: "Book updated Successfully", data: { book } })
     } else {
