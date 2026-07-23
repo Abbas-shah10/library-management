@@ -15,6 +15,7 @@ import {
   Loans,
   Settings,
   Fines,
+  Reservations,
 } from "./_root/pages/index";
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
           <Route path="/admin/loans" element={<Loans />} />
           <Route path="/admin/settings" element={<Settings />} />
           <Route path="/admin/fines" element={<Fines />} />
+          <Route path="/admin/reservation" element={<Reservations />} />
         </Route>
       </Routes>
       <ToastContainer />

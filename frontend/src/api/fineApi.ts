@@ -13,6 +13,11 @@ export const getAllFines = async () => {
   return data;
 };
 
+export const payFine = async (id: number) => {
+  const { data } = await api.patch(`/fines/${id}/pay`);
+  return data;
+};
+
 export const waiveFine = async (fineId: number) => {
   const { data } = await api.delete(`/fines/${fineId}/waive`);
   return data;

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const Fines = () => {
-  const { fetchAllFines, fines, waiveFine } = useFineStore();
+  const { fetchAllFines, fines, waiveFine, payFine } = useFineStore();
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -29,7 +29,14 @@ const Fines = () => {
       f?.Loan?.Book?.title?.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const handlePayFine = async (id: number) => {};
+  const handlePayFine = async (id: number) => {
+    try {
+      await payFine(id);
+      toast.success("Fine paid successfully");
+    } catch (error) {
+      toast.error("Error paying fine!!");
+    }
+  };
 
   const handlePayAll = async (memberId: number) => {};
 

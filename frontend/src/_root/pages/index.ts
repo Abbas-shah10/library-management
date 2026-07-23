@@ -9,6 +9,7 @@ import Members from "./admin/Members";
 import Loans from "./admin/Loans";
 import Settings from "./admin/Settings";
 import Fines from "./admin/Fines";
+import Reservations from "./admin/Reservations";
 export {
   Home,
   Profile,
@@ -21,4 +22,5 @@ export {
   Loans,
   Settings,
   Fines,
+  Reservations,
 };

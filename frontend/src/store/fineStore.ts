@@ -15,6 +15,7 @@ interface FineState {
   fetchAllFines: () => Promise<void>;
   waiveFine: (fineId: number) => Promise<void>;
   createFine: (payload: Fine) => Promise<void>;
+  payFine: (id: number) => Promise<void>;
 }
 
 const useFineStore = create<FineState>((set) => ({
@@ -62,6 +63,23 @@ const useFineStore = create<FineState>((set) => ({
 
       set((state) => ({
         fines: [...state.fines, data.data || data],
+        loading: false,
+      }));
+    } catch (error: any) {
+      set({
+        error: error.response?.data?.message || "Failed to fetch book",
+        loading: false,
+      });
+    }
+  },
+
+  payFine: async (id) => {
+    set({ loading: true, error: null });
+    try {
+      await fineApi.payFine(id);
+
+      set((state) => ({
+        fines: state.fines.filter((fine) => !fine.paid),
         loading: false,
       }));
     } catch (error: any) {
