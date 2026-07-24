@@ -3,6 +3,7 @@ import generateToken from "../utils/generateToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
+import { Op, Sequelize } from 'sequelize';
 
 const registerUser = async (req, res) => {
   try {
@@ -116,6 +117,17 @@ const fetchAllUsers = async (req, res) => {
     } else {
       res.status(404).json({ message: "Error Fetching all users" });
     }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong", error: error.message });
+  }
+}
+
+const filteredUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({ where: { status: ['active', 'inactive'] } })
+
+    res.json(users);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Something went wrong", error: error.message });

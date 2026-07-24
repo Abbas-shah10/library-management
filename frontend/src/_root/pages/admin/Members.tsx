@@ -512,12 +512,6 @@ const StatCard = ({
   color: string;
   change: string;
 }) => {
-  const colors: Record<string, string> = {
-    gray: "bg-gray-800 text-white",
-    purple: "bg-purple-900/50 text-purple-400",
-    green: "bg-green-900/50 text-green-400",
-    blue: "bg-blue-900/50 text-blue-400",
-  };
   return (
     <div className="bg-gradient-to-br from-gray-900 to-gray-950 rounded-2xl shadow-lg p-6 border border-gray-800 hover:border-gray-700 transition">
       <p className="text-sm text-gray-400 uppercase tracking-wide font-medium">

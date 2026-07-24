@@ -10,7 +10,7 @@ const roleColors: Record<string, string> = {
 };
 
 const Users = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState<string>("");
   const { users, fetchUsers } = useUserStore();
 
   const filtered = users.filter(
@@ -22,6 +22,13 @@ const Users = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const stats = {
+    total: users.length,
+    admins: users.filter((f) => f.role === "Admin").length,
+    librarian: users.filter((f) => f.role === "Librarian").length,
+    member: users.filter((f) => f.role === "Member").length,
+  };
 
   return (
     <div className="min-h-screen bg-gray-950 text-white w-full">
@@ -66,21 +73,10 @@ const Users = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          {userStats.map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-gray-900 rounded-xl p-4 border border-gray-800"
-            >
-              <p className="text-xs text-gray-400">{stat.label}</p>
-              <p className="text-2xl font-bold mt-1">{users?.length}</p>
-              <div className="mt-3 h-1.5 rounded-full bg-gray-800 overflow-hidden">
-                <div
-                  className={`h-full rounded-full bg-gradient-to-r ${stat.color}`}
-                  style={{ width: "60%" }}
-                />
-              </div>
-            </div>
-          ))}
+          <StatCard label="All Members" value={stats.total} change="12%" />
+          <StatCard label="Admin" value={stats.admins} change="13%" />
+          <StatCard label="Librarian" value={stats.librarian} change="0" />
+          <StatCard label="Member" value={stats.member} change="0" />
         </div>
 
         {/* Table */}
@@ -185,4 +181,26 @@ const Users = () => {
   );
 };
 
+const StatCard = ({
+  label,
+  value,
+  change,
+}: {
+  label: string;
+  value: number;
+  change: string;
+}) => {
+  return (
+    <div className="bg-gradient-to-br from-gray-900 to-gray-950 rounded-2xl shadow-lg p-6 border border-gray-800 hover:border-gray-700 transition">
+      <p className="text-sm text-gray-400 uppercase tracking-wide font-medium">
+        {label}
+      </p>
+      <p className="text-4xl font-bold text-white mt-2">{value}</p>
+      <div className="mt-4 flex items-center text-sm">
+        <span className="text-green-400 font-medium">{change}</span>
+        <span className="text-gray-500 ml-2">from last month</span>
+      </div>
+    </div>
+  );
+};
 export default Users;
