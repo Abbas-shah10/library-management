@@ -1,20 +1,15 @@
-import axios from "axios";
+import useReservationStore from "@/store/reservationStore";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-interface Reservation {
-  id: number;
-  book_id: number;
-  member_id: number;
-  reservation_date: string;
-  status: string;
-  Book?: { id: number; title: string };
-  Member?: { id: number; name: string; email: string };
-}
-
 const Reservations = () => {
-  const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    reservations,
+    fetchAllReservation,
+    cancelReservation,
+    fulfillReservation,
+  } = useReservationStore();
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
@@ -23,22 +18,36 @@ const Reservations = () => {
     reservation_date: "",
   });
   const [submitting, setSubmitting] = useState(false);
-
-  const fetchReservations = async () => {
-    try {
-      const res = await axios.get("/api/v1/reservations");
-      const data = res.data?.data?.reservations ?? res.data?.data ?? res.data;
-      setReservations(Array.isArray(data) ? data : []);
-    } catch {
-      toast.error("Failed to fetch reservations");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  const stats = [
+    {
+      label: "Total",
+      value: reservations.length,
+      color: "text-blue-400",
+      icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z",
+    },
+    {
+      label: "Waiting",
+      value: reservations?.filter((r) => r.status === "waiting")?.length,
+      color: "text-yellow-400",
+      icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
+    },
+    {
+      label: "FulFilled",
+      value: reservations?.filter((r) => r.status === "fulfilled")?.length,
+      color: "text-emerald-400",
+      icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
+    },
+    {
+      label: "Cancelled",
+      value: reservations?.filter((r) => r.status === "cancelled")?.length,
+      color: "text-red-400",
+      icon: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z",
+    },
+  ];
   useEffect(() => {
-    fetchReservations();
+    fetchAllReservation();
   }, []);
+  console.log(reservations);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -49,22 +58,7 @@ const Reservations = () => {
     setSubmitting(true);
   };
 
-  const updateStatus = async (id: number, status: string) => {
-    try {
-      await axios.patch(`/api/v1/reservations/${id}`, { status });
-      toast.success(`Reservation ${status}`);
-      fetchReservations();
-    } catch {
-      toast.error("Failed to update");
-    }
-  };
-
-  const total = reservations.length;
-  const pending = reservations.filter((r) => r.status === "pending").length;
-  const confirmed = reservations.filter((r) => r.status === "confirmed").length;
-  const cancelled = reservations.filter((r) => r.status === "cancelled").length;
-
-  const filtered = reservations.filter(
+  const filtered = reservations?.filter(
     (r) =>
       r.Book?.title?.toLowerCase().includes(search.toLowerCase()) ||
       r.Member?.name?.toLowerCase().includes(search.toLowerCase()),
@@ -81,32 +75,7 @@ const Reservations = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        {[
-          {
-            label: "Total",
-            value: total,
-            color: "text-blue-400",
-            icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z",
-          },
-          {
-            label: "Pending",
-            value: pending,
-            color: "text-yellow-400",
-            icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z",
-          },
-          {
-            label: "Confirmed",
-            value: confirmed,
-            color: "text-emerald-400",
-            icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z",
-          },
-          {
-            label: "Cancelled",
-            value: cancelled,
-            color: "text-red-400",
-            icon: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z",
-          },
-        ].map((stat) => (
+        {stats.map((stat) => (
           <div
             key={stat.label}
             className="bg-gradient-to-br from-gray-900 to-gray-950 rounded-2xl shadow-lg p-6 border border-gray-800 hover:border-gray-700 transition"
@@ -242,11 +211,11 @@ const Reservations = () => {
                   <td className="py-4 px-6">
                     <span
                       className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        r.status === "pending"
+                        r.status === "waiting"
                           ? "bg-yellow-900/50 text-yellow-400 border border-yellow-700"
-                          : r.status === "confirmed"
+                          : r.status === "fulfilled"
                             ? "bg-emerald-900/50 text-emerald-400 border border-emerald-700"
-                            : r.status === "fulfilled"
+                            : r.status === "cancelled"
                               ? "bg-blue-900/50 text-blue-400 border border-blue-700"
                               : "bg-red-900/50 text-red-400 border border-red-700"
                       }`}
@@ -256,28 +225,28 @@ const Reservations = () => {
                   </td>
                   <td className="py-4 px-6 text-right">
                     <div className="flex justify-end gap-2">
-                      {r.status === "pending" && (
+                      {r.status === "waiting" && (
                         <>
                           <button
-                            onClick={() => updateStatus(r.id, "confirmed")}
+                            onClick={() => fulfillReservation(r.id)}
                             className="text-emerald-400 hover:text-emerald-300 text-sm font-medium transition"
                           >
                             Confirm
                           </button>
                           <button
-                            onClick={() => updateStatus(r.id, "cancelled")}
+                            onClick={() => cancelReservation(r.id)}
                             className="text-red-400 hover:text-red-300 text-sm font-medium transition"
                           >
                             Cancel
                           </button>
                         </>
                       )}
-                      {r.status === "confirmed" && (
+                      {r.status === "fulfilled" && (
                         <button
-                          onClick={() => updateStatus(r.id, "fulfilled")}
+                          onClick={() => fulfillReservation(r.id)}
                           className="text-blue-400 hover:text-blue-300 text-sm font-medium transition"
                         >
-                          Fulfill
+                          Fulfilled
                         </button>
                       )}
                     </div>

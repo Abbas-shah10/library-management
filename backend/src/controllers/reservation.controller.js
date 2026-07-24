@@ -86,4 +86,37 @@ const fetchReservationById = async (req, res) => {
     res.status(500).json({ message: "Something went wrong", error: error.message });
   }
 }
-export { createReservation, fetchAllReservation, fetchReservationById };
+
+const fulfillReservation = async (req, res) => {
+  const reservation = await Reservation.findByPk(req.params.id);
+
+  if (!reservation) {
+    return res.status(404).json({ message: "Could not find reservation" });
+  } else {
+    if (reservation.status === 'waiting') {
+      await reservation.update({ status: "fulfilled" })
+
+      return res.status(200).json({ message: "Reservation status fulfilled" })
+    } else {
+      return res.status(400).json({ message: "The reservation was found, it just wasn't in waiting status" })
+    }
+  }
+}
+
+const cancelReservation = async (req, res) => {
+  const reservation = await Reservation.findByPk(req.params.id);
+
+
+  if (!reservation) {
+    return res.status(404).json({ message: "Could not find reservation" })
+  } else {
+    if (reservation.status === 'waiting') {
+      await reservation.update({ status: "cancelled" })
+      return res.status(200).json({ message: "Reservation status updated successfully" })
+    } else {
+      return res.status(400).json({ message: "The reservation was found, it just wasn't in waiting status" })
+    }
+  }
+
+}
+export { createReservation, fetchAllReservation, fetchReservationById, fulfillReservation, cancelReservation };

@@ -43,7 +43,7 @@ const useMemberStore = create<MemberState>((set) => ({
       }));
     } catch (err: any) {
       set({
-        error: err.response?.data?.message || "Failed to create book",
+        error: err.response?.data?.message || "Failed to create Member",
         loading: false,
       });
     }
@@ -62,7 +62,7 @@ const useMemberStore = create<MemberState>((set) => ({
       });
     } catch (err: any) {
       set({
-        error: err.response?.data?.message || "Failed to create book",
+        error: err.response?.data?.message || "Failed to Fetch All Members",
         loading: false,
       });
     }
@@ -80,7 +80,7 @@ const useMemberStore = create<MemberState>((set) => ({
       }));
     } catch (err: any) {
       set({
-        error: err.response?.data?.message || "Failed to create book",
+        error: err.response?.data?.message || "Failed to Delete member",
         loading: false,
       });
     }
@@ -98,7 +98,7 @@ const useMemberStore = create<MemberState>((set) => ({
       });
     } catch (error: any) {
       set({
-        error: error.response?.data?.message || "Failed to create book",
+        error: error.response?.data?.message || "Failed to Fetch Member",
         loading: false,
       });
     }
@@ -117,7 +117,7 @@ const useMemberStore = create<MemberState>((set) => ({
       }));
     } catch (error: any) {
       set({
-        error: error.response?.data?.message || "Failed to create book",
+        error: error.response?.data?.message || "Failed to Update Member",
         loading: false,
       });
     }
