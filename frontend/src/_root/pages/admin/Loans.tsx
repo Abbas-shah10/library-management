@@ -2,7 +2,7 @@ import useLoanStore from "@/store/loanStore";
 import React, { useEffect, useState } from "react";
 
 const Loans = () => {
-  const { loans, fetchLoans, borrowBook } = useLoanStore();
+  const { loans, fetchLoans, borrowBook, returnBook } = useLoanStore();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<string>("borrow");
   const [form, setForm] = useState({
@@ -39,7 +39,9 @@ const Loans = () => {
     await borrowBook(form);
   };
 
-  const handleReturn = async (id: number) => {};
+  const handleReturn = async (id: number) => {
+    await returnBook(id);
+  };
 
   const activeLoans = loans.filter((l) => l?.status === "active").length;
   const overdueLoans = loans.filter((l) => l?.status === "overdue").length;
@@ -372,7 +374,7 @@ const Loans = () => {
                   placeholder="Enter book ID"
                 />
               </div>
-              {modalType === "borrow" && (
+              {(modalType === "borrow" || modalType === "return") && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Due Date *

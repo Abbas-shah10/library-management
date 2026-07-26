@@ -15,3 +15,8 @@ export const borrowBook = async (payload: Props) => {
   const { data } = await api.post(`/loans`, payload);
   return data;
 };
+
+export const returnBook = async (loanId: number) => {
+  const { data } = await api.patch(`/loans/${loanId}/return`);
+  return data;
+};

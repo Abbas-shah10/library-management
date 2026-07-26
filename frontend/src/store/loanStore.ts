@@ -18,6 +18,7 @@ interface LoanState {
   error: null | string;
   fetchLoans: () => Promise<void>;
   borrowBook: (payload: Partial<Loan>) => Promise<void>;
+  returnBook: (loanId: number) => Promise<void>;
 }
 
 const useLoanStore = create<LoanState>((set) => ({
@@ -47,7 +48,6 @@ const useLoanStore = create<LoanState>((set) => ({
     set({ loading: true, error: null });
     try {
       const data = await loanApi.borrowBook(payload);
-      console.log("Borrowed book", data);
       set((state) => ({
         loans: [...state.loans, data.data || data],
         loading: false,
@@ -55,6 +55,24 @@ const useLoanStore = create<LoanState>((set) => ({
     } catch (error: any) {
       set({
         error: error.response?.data?.message || "Failed to Borrow a book",
+        loading: false,
+      });
+    }
+  },
+  returnBook: async (loanId: number) => {
+    set({ loading: true, error: null });
+    try {
+      await loanApi.returnBook(loanId);
+
+      set((state) => ({
+        loans: state.loans.map((l) =>
+          l.id === loanId ? { ...l, status: "returned" } : l,
+        ),
+        loading: false,
+      }));
+    } catch (error: any) {
+      set({
+        error: error.response?.data?.message || "Failed to Return book",
         loading: false,
       });
     }
