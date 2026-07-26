@@ -7,7 +7,7 @@ const borrowBook = async (req, res) => {
   try {
     const { member_id, book_id, due_date, status } = req.body;
 
-    if (!member_id || !book_id || !due_date || !status) {
+    if (!member_id || !book_id || !due_date) {
       return res.status(400).json({ message: "ALl fields are required" })
     }
 

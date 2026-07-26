@@ -2,16 +2,21 @@ import useLoanStore from "@/store/loanStore";
 import React, { useEffect, useState } from "react";
 
 const Loans = () => {
-  const { loans, fetchLoans } = useLoanStore();
+  const { loans, fetchLoans, borrowBook } = useLoanStore();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<string>("borrow");
-  const [form, setForm] = useState({ memberId: "", bookId: "", dueDate: "" });
+  const [form, setForm] = useState({
+    member_id: "",
+    book_id: "",
+    due_date: "",
+  });
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     fetchLoans();
   }, []);
+  console.log(loans);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -19,18 +24,19 @@ const Loans = () => {
 
   const openBorrow = () => {
     setModalType("borrow");
-    setForm({ memberId: "", bookId: "", dueDate: "" });
+    setForm({ member_id: "", book_id: "", due_date: "" });
     setShowModal(true);
   };
 
   const openReturn = () => {
     setModalType("return");
-    setForm({ memberId: "", bookId: "" });
+    setForm({ member_id: "", book_id: "", due_date: "" });
     setShowModal(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await borrowBook(form);
   };
 
   const handleReturn = async (id: number) => {};
@@ -344,8 +350,8 @@ const Loans = () => {
                 </label>
                 <input
                   type="number"
-                  name="memberId"
-                  value={form.memberId}
+                  name="member_id"
+                  value={form.member_id}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-2.5 rounded-lg border text-black border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -358,8 +364,8 @@ const Loans = () => {
                 </label>
                 <input
                   type="number"
-                  name="bookId"
-                  value={form.bookId}
+                  name="book_id"
+                  value={form.book_id}
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-2.5 rounded-lg border text-black border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -373,11 +379,11 @@ const Loans = () => {
                   </label>
                   <input
                     type="date"
-                    name="dueDate"
-                    value={form.dueDate}
+                    name="due_date"
+                    value={form.due_date}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-black"
                   />
                 </div>
               )}

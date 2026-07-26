@@ -17,6 +17,7 @@ interface LoanState {
   loading: boolean;
   error: null | string;
   fetchLoans: () => Promise<void>;
+  borrowBook: (payload: Partial<Loan>) => Promise<void>;
 }
 
 const useLoanStore = create<LoanState>((set) => ({
@@ -38,6 +39,22 @@ const useLoanStore = create<LoanState>((set) => ({
     } catch (error: any) {
       set({
         error: error.response?.data?.message || "Failed to fetch book",
+        loading: false,
+      });
+    }
+  },
+  borrowBook: async (payload) => {
+    set({ loading: true, error: null });
+    try {
+      const data = await loanApi.borrowBook(payload);
+      console.log("Borrowed book", data);
+      set((state) => ({
+        loans: [...state.loans, data.data || data],
+        loading: false,
+      }));
+    } catch (error: any) {
+      set({
+        error: error.response?.data?.message || "Failed to Borrow a book",
         loading: false,
       });
     }

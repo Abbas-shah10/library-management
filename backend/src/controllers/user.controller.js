@@ -108,12 +108,69 @@ const logoutUser = async (req, res) => {
   }
 }
 
+const refreshTokenUser = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({ message: "Refresh token is required" });
+    }
+
+    const tokenHash = crypto.createHash("sha256").update(refreshToken).digest("hex");
+
+    const storedToken = await RefreshToken.findOne({
+      where: {
+        token_hash: tokenHash,
+        revoked_at: null,
+        expires_at: { [Op.gt]: new Date() },
+      },
+    });
+
+    if (!storedToken) {
+      return res.status(401).json({ message: "Invalid or expired refresh token" });
+    }
+
+    const user = await User.findByPk(storedToken.user_id);
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    const accessToken = generateToken(user.id);
+
+    res.status(200).json({ accessToken });
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    res.status(500).json({ message: "Something went wrong", error: error.message });
+  }
+}
+
 const fetchAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const fetchedUsers = await User.findAll();
 
-    if (users) {
-      res.status(200).json({ message: "All users Fetched Successfully", users })
+    const { keyword, is_active, role } = req.query;
+
+    const where = {};
+
+    if (where) {
+      where[Op.or] = [
+        { email: { [Op.like]: `%${keyword}` } },
+        { username: { [Op.like]: `%${keyword}` } }
+      ]
+    }
+    if (is_active) {
+      where.is_active = is_active;
+    }
+
+    if (role) {
+      where.role = role;
+    }
+
+    const users = await User.findAndCountAll({ where });
+
+    if (users || fetchedUsers) {
+      res.status(200).json({ message: "All users Fetched Successfully", users, fetchedUsers })
     } else {
       res.status(404).json({ message: "Error Fetching all users" });
     }
@@ -123,15 +180,5 @@ const fetchAllUsers = async (req, res) => {
   }
 }
 
-const filteredUsers = async (req, res) => {
-  try {
-    const users = await User.findAll({ where: { status: ['active', 'inactive'] } })
 
-    res.json(users);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Something went wrong", error: error.message });
-  }
-}
-
-export { registerUser, loginUser, logoutUser, fetchAllUsers }
+export { registerUser, loginUser, logoutUser, refreshTokenUser, fetchAllUsers }
