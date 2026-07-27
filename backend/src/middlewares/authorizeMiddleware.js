@@ -27,12 +27,12 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-const isAdmin = async (req, res, next) => {
-  if (req.user?.role === 'Admin') {
+const authorize = async (req, res, next) => {
+  if (req.user?.role === 'Admin' || req.user?.role === "Librarian" || req.user?.role === "Member") {
     next();
   } else {
     res.status(401).json({ message: 'Not Authorized as Admin' })
   }
 }
 
-export { authenticate, isAdmin };
+export { authenticate, authorize };

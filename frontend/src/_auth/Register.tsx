@@ -17,7 +17,9 @@ const Register = () => {
   const navigate = useNavigate();
   const { setAuth } = useAuthStore();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
@@ -54,7 +56,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4 w-full">
       <div className="w-full max-w-md">
         <div className="bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20">
           <div className="flex flex-col items-center mb-8">
@@ -120,9 +122,15 @@ const Register = () => {
                   onChange={handleChange}
                   className="w-full bg-white/5 border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all appearance-none"
                 >
-                  <option value="Member" className="bg-slate-800">Member</option>
-                  <option value="Librarian" className="bg-slate-800">Librarian</option>
-                  <option value="Admin" className="bg-slate-800">Admin</option>
+                  <option value="Member" className="bg-slate-800">
+                    Member
+                  </option>
+                  <option value="Librarian" className="bg-slate-800">
+                    Librarian
+                  </option>
+                  <option value="Admin" className="bg-slate-800">
+                    Admin
+                  </option>
                 </select>
               </div>
             </div>
@@ -181,7 +189,10 @@ const Register = () => {
 
           <p className="text-center text-gray-400 mt-6 text-sm">
             Already have an account?{" "}
-            <Link to="/login" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+            <Link
+              to="/login"
+              className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
+            >
               Sign in
             </Link>
           </p>

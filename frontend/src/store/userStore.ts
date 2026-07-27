@@ -33,7 +33,10 @@ const useUserStore = create<UserState>((set) => ({
     set({ loading: true, error: null }); // start loading, clear old error
     try {
       const data = await userApi.fetchAllusers();
-      set({ users: data.data?.users || data.users || data, loading: false });
+      set({
+        users: data.data?.users || data.users || data.fetchedUsers,
+        loading: false,
+      });
     } catch (err: any) {
       set({
         error: err.response?.data?.message || "Failed to fetch users",

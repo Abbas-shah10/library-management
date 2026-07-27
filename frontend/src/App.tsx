@@ -16,6 +16,10 @@ import {
   Settings,
   Fines,
   Reservations,
+  LibrarianDashboard,
+  IssueBook,
+  MemberDashboard,
+  ReturnBook,
 } from "./_root/pages/index";
 
 const App = () => {
@@ -44,6 +48,19 @@ const App = () => {
           <Route path="/admin/settings" element={<Settings />} />
           <Route path="/admin/fines" element={<Fines />} />
           <Route path="/admin/reservation" element={<Reservations />} />
+        </Route>
+
+        {/* Librarian Routes */}
+        <Route element={<RootLayout />}>
+          <Route path="/librarian/dashboard" element={<LibrarianDashboard />} />
+          <Route path="/librarian/issue" element={<IssueBook />} />
+          <Route path="/librarian/members" element={<Members />} />
+          <Route path="/librarian/return" element={<ReturnBook />} />
+        </Route>
+
+        {/* Member Routes */}
+        <Route element={<RootLayout />}>
+          <Route path="/member/dashboard" element={<MemberDashboard />} />
         </Route>
       </Routes>
       <ToastContainer />

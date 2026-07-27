@@ -1,12 +1,12 @@
 import express from "express";
 import { createBook, deleteBook, getAllbooks, getBookById, updateBook } from "../controllers/books.controller.js";
-import { authenticate, isAdmin } from "../middlewares/authorizeMiddleware.js";
+import { authenticate, authorize } from "../middlewares/authorizeMiddleware.js";
 
 const router = express.Router();
 
 
-router.route("/").post(authenticate, isAdmin, createBook).get(authenticate, isAdmin, getAllbooks)
-router.route("/:bookId").put(authenticate, isAdmin, updateBook).delete(authenticate, isAdmin, deleteBook).get(authenticate, isAdmin, getBookById)
+router.route("/").post(authenticate, authorize, createBook).get(authenticate, authorize, getAllbooks)
+router.route("/:bookId").put(authenticate, authorize, updateBook).delete(authenticate, authorize, deleteBook).get(authenticate, authorize, getBookById)
 
 
 export default router;

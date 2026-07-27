@@ -30,7 +30,11 @@ const LeftSidebar = () => {
                     to={link.route}
                     className="flex gap-4 items-center p-4"
                   >
-                    {link.icon}
+                    {typeof link.icon === "string" ? (
+                      link.icon
+                    ) : (
+                      <link.icon className="w-5 h-5" />
+                    )}
                     {link.label}
                   </NavLink>
                 </li>

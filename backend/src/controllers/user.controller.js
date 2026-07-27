@@ -147,30 +147,30 @@ const refreshTokenUser = async (req, res) => {
 
 const fetchAllUsers = async (req, res) => {
   try {
-    const fetchedUsers = await User.findAll();
+    const users = await User.findAll();
 
-    const { keyword, is_active, role } = req.query;
+    // const { keyword, is_active, role } = req.query;
 
-    const where = {};
+    // const where = {};
 
-    if (where) {
-      where[Op.or] = [
-        { email: { [Op.like]: `%${keyword}` } },
-        { username: { [Op.like]: `%${keyword}` } }
-      ]
-    }
-    if (is_active) {
-      where.is_active = is_active;
-    }
+    // if (where) {
+    //   where[Op.or] = [
+    //     { email: { [Op.like]: `%${keyword}` } },
+    //     { username: { [Op.like]: `%${keyword}` } }
+    //   ]
+    // }
+    // if (is_active) {
+    //   where.is_active = is_active;
+    // }
 
-    if (role) {
-      where.role = role;
-    }
+    // if (role) {
+    //   where.role = role;
+    // }
 
-    const users = await User.findAndCountAll({ where });
+    // const users = await User.findAndCountAll({ where });
 
-    if (users || fetchedUsers) {
-      res.status(200).json({ message: "All users Fetched Successfully", users, fetchedUsers })
+    if (users) {
+      res.status(200).json({ message: "All users Fetched Successfully", users })
     } else {
       res.status(404).json({ message: "Error Fetching all users" });
     }

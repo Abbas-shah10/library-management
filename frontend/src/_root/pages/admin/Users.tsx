@@ -13,15 +13,15 @@ const Users = () => {
   const [search, setSearch] = useState<string>("");
   const { users, fetchUsers } = useUserStore();
 
-  const filtered = users.filter(
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const filtered = users?.filter(
     (u) =>
       u.username.toLowerCase().includes(search.toLowerCase()) ||
       u.email.toLowerCase().includes(search.toLowerCase()),
   );
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
 
   const stats = {
     total: users.length,

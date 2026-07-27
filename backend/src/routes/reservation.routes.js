@@ -1,15 +1,15 @@
 import { Router } from 'express'
-import { authenticate, isAdmin } from '../middlewares/authorizeMiddleware.js';
+import { authenticate, authorize } from '../middlewares/authorizeMiddleware.js';
 import { cancelReservation, createReservation, fetchAllReservation, fetchReservationById, fulfillReservation } from '../controllers/reservation.controller.js';
 
 const router = Router();
 
-router.route("/").post(authenticate, isAdmin, createReservation).get(authenticate, isAdmin, fetchAllReservation)
-router.route("/:id").get(authenticate, isAdmin, fetchReservationById);
+router.route("/").post(authenticate, authorize, createReservation).get(authenticate, authorize, fetchAllReservation)
+router.route("/:id").get(authenticate, authorize, fetchReservationById);
 
 
 // actions
-router.route("/:id/fulfill").patch(authenticate, isAdmin, fulfillReservation)
-router.route("/:id/cancel").patch(authenticate, isAdmin, cancelReservation)
+router.route("/:id/fulfill").patch(authenticate, authorize, fulfillReservation)
+router.route("/:id/cancel").patch(authenticate, authorize, cancelReservation)
 
 export default router;
