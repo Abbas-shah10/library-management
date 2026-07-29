@@ -2,7 +2,7 @@ import { Author, Book, User } from '../models/associations.js'
 
 const createBook = async (req, res) => {
   try {
-    const { title, isbn, publisher, publication_year, total_copies, shelf_location, authorIds } = req.body;
+    const { title, isbn, publisher, publication_year, total_copies, shelf_location, authorIds, category_id } = req.body;
     const userId = req.user.id;
 
     if (!title | !isbn | !publisher) {
@@ -17,6 +17,7 @@ const createBook = async (req, res) => {
       total_copies,
       shelf_location,
       user_id: userId,
+      category_id
     })
 
     if (authorIds.length) {
