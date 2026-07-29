@@ -45,14 +45,6 @@ const LibrarianDashboard = () => {
               Hello, {user?.username} Librarian
             </h1>
           </div>
-          <div className="flex items-center gap-4">
-            <button className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition">
-              🔔
-            </button>
-            <button className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition">
-              ⚙️
-            </button>
-          </div>
         </header>
 
         <main className="flex-1 overflow-y-auto p-6 space-y-6">

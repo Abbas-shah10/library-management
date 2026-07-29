@@ -145,11 +145,8 @@ const Books = () => {
                   </span>
                 </div>
                 <div className="flex gap-2 pt-1">
-                  <button className="flex-1 px-3 py-1.5 bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 text-xs rounded-lg transition border border-purple-500/30">
-                    View
-                  </button>
                   <button
-                    className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs rounded-lg transition"
+                    className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs rounded-lg transition w-[50%]"
                     onClick={() => {
                       setSelectedBookId(book.id);
                       setUpdateModalOpen(true);
@@ -158,7 +155,7 @@ const Books = () => {
                     ✏️
                   </button>
                   <button
-                    className="px-3 py-1.5 bg-gray-800 hover:bg-red-500/20 text-gray-300 hover:text-red-300 text-xs rounded-lg transition"
+                    className="px-3 py-1.5 bg-gray-800 hover:bg-red-500/20 text-gray-300 hover:text-red-300 text-xs rounded-lg transition w-[50%]"
                     onClick={() => handleDeleteBook(book.id)}
                   >
                     🗑️

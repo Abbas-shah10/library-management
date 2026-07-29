@@ -44,13 +44,11 @@ export const librarianLinks = [
 
 // Member sidebar
 export const memberLinks = [
-  { icon: Home, route: "/", label: "Home" },
-  { icon: Search, route: "/books", label: "Browse" },
-  { icon: BookMarked, route: "/my-books", label: "My Books" },
-  { icon: Bookmark, route: "/reservations", label: "Reservations" },
-  { icon: CircleDollarSign, route: "/fines", label: "Fines" },
-  { icon: User, route: "/profile", label: "Profile" },
-  { icon: User, route: "/profile", label: "Profile" },
+  { icon: Home, route: "/member/dashboard", label: "Home", active: true },
+  { icon: Search, route: "/member/books", label: "Browse" },
+  { icon: BookMarked, route: "/member/my-books", label: "My Books" },
+  { icon: Bookmark, route: "/member/reservations", label: "Reservations" },
+  { icon: CircleDollarSign, route: "/member/fines", label: "Fines" },
 ];
 
 export const formatDateTime = (dateStr: string): string => {
