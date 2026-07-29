@@ -8,7 +8,6 @@ import {
   Profile,
   Dashboard,
   Users,
-  Reports,
   Books,
   Home,
   Members,
@@ -42,7 +41,6 @@ const App = () => {
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/books" element={<Books />} />
-          <Route path="/admin/reports" element={<Reports />} />
           <Route path="/admin/members" element={<Members />} />
           <Route path="/admin/loans" element={<Loans />} />
           <Route path="/admin/settings" element={<Settings />} />
