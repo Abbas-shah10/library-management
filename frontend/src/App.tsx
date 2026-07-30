@@ -19,6 +19,8 @@ import {
   IssueBook,
   MemberDashboard,
   ReturnBook,
+  Reservation,
+  AllBooks,
 } from "./_root/pages/index";
 
 const App = () => {
@@ -59,6 +61,8 @@ const App = () => {
         {/* Member Routes */}
         <Route element={<RootLayout />}>
           <Route path="/member/dashboard" element={<MemberDashboard />} />
+          <Route path="/member/reservations" element={<Reservation />} />
+          <Route path="/member/books" element={<AllBooks />} />
         </Route>
       </Routes>
       <ToastContainer />

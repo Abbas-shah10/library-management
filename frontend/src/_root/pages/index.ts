@@ -13,6 +13,8 @@ import LibrarianDashboard from "./Librarian/LibrarianDashboard";
 import IssueBook from "./Librarian/IssueBook";
 import MemberDashboard from "./Member/MemberDashboard";
 import ReturnBook from "./Librarian/ReturnBook";
+import Reservation from "./Member/Reservation";
+import AllBooks from "./Member/AllBooks";
 export {
   Home,
   Profile,
@@ -29,4 +31,6 @@ export {
   IssueBook,
   MemberDashboard,
   ReturnBook,
+  Reservation,
+  AllBooks,
 };
