@@ -23,21 +23,21 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex w-full">
+    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-white flex w-full">
       {/* Main area */}
       <div className="flex-1 flex flex-col">
         {/* Topbar */}
-        <header className="h-16 bg-gray-900 border-b border-gray-800 flex items-center justify-between px-6">
+        <header className="h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-6">
           <div className="flex items-center gap-4">
             <h1 className="text-lg font-semibold">
               Hello, Mr.{user?.username} Admin
             </h1>
           </div>
           <div className="flex items-center gap-4">
-            <button className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition">
+            <button className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
               🔔
             </button>
-            <button className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition">
+            <button className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
               ⚙️
             </button>
           </div>
@@ -55,7 +55,7 @@ const Dashboard = () => {
 
           {/* Charts row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
+            <div className="bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-200 dark:border-gray-800">
               <h3 className="font-semibold mb-4">Monthly Loans</h3>
               <div className="flex items-end gap-2 h-40">
                 {[40, 65, 45, 80, 55, 90, 70, 85, 60, 75, 95, 88].map(
@@ -68,7 +68,7 @@ const Dashboard = () => {
                         className="w-full bg-gradient-to-t from-purple-600 to-purple-400 rounded-t"
                         style={{ height: `${h}%` }}
                       />
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
                         {
                           [
                             "J",
@@ -92,7 +92,7 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
+            <div className="bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-200 dark:border-gray-800">
               <h3 className="font-semibold mb-4">Book Categories</h3>
               <div className="space-y-3">
                 {[
@@ -104,10 +104,10 @@ const Dashboard = () => {
                 ].map((cat) => (
                   <div key={cat.label}>
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-300">{cat.label}</span>
-                      <span className="text-gray-500">{cat.count}</span>
+                      <span className="text-gray-600 dark:text-gray-300">{cat.label}</span>
+                      <span className="text-gray-500 dark:text-gray-400">{cat.count}</span>
                     </div>
-                    <div className="h-2 rounded-full bg-gray-800 overflow-hidden">
+                    <div className="h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
                       <div
                         className="h-full rounded-full bg-gradient-to-r from-purple-500 to-pink-500"
                         style={{ width: `${cat.pct}%` }}
@@ -120,8 +120,8 @@ const Dashboard = () => {
           </div>
 
           {/* Table */}
-          <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
-            <div className="p-5 border-b border-gray-800 flex items-center justify-between">
+          <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
+            <div className="p-5 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
               <h3 className="font-semibold">Recent Loans</h3>
               <button className="text-sm text-purple-400 hover:text-purple-300">
                 View All
@@ -130,7 +130,7 @@ const Dashboard = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-800 text-gray-500">
+                  <tr className="border-b border-gray-200 dark:border-gray-800 text-gray-500 dark:text-gray-400">
                     <th className="text-left p-4 font-medium">Member</th>
                     <th className="text-left p-4 font-medium">Book</th>
                     <th className="text-left p-4 font-medium">Loan Date</th>
@@ -142,20 +142,20 @@ const Dashboard = () => {
                   {loans.map((loan) => (
                     <tr
                       key={loan?.id}
-                      className="border-b border-gray-800/50 hover:bg-gray-800/30"
+                      className="border-b border-gray-200 dark:border-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-800/30"
                     >
-                      <td className="p-4 text-gray-200">{loan.Member?.name}</td>
-                      <td className="p-4 text-gray-200">{loan.Book?.title}</td>
-                      <td className="p-4 text-gray-400">{loan.loan_date}</td>
-                      <td className="p-4 text-gray-400">{loan.due_date}</td>
+                      <td className="p-4 text-gray-700 dark:text-gray-200">{loan.Member?.name}</td>
+                      <td className="p-4 text-gray-700 dark:text-gray-200">{loan.Book?.title}</td>
+                      <td className="p-4 text-gray-500 dark:text-gray-400">{loan.loan_date}</td>
+                      <td className="p-4 text-gray-500 dark:text-gray-400">{loan.due_date}</td>
                       <td className="p-4">
                         <span
                           className={`px-2.5 py-1 rounded-full text-xs font-medium ${
                             loan.status === "active"
-                              ? "bg-emerald-500/20 text-emerald-300"
+                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-300"
                               : loan.status === "overdue"
-                                ? "bg-rose-500/20 text-rose-300"
-                                : "bg-gray-700 text-gray-300"
+                                ? "bg-rose-100 text-rose-600 dark:bg-rose-500/20 dark:text-rose-300"
+                                : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300"
                           }`}
                         >
                           {loan.status}

@@ -13,8 +13,6 @@ const AllBooks = () => {
     b.title.toLowerCase().includes(search.toLowerCase()),
   );
 
-
-
   return (
     <div className="min-h-screen bg-gray-950 text-white w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -87,6 +85,9 @@ const AllBooks = () => {
                 <th className="text-right py-4 px-6 text-xs font-semibold text-gray-400 uppercase">
                   Publisher
                 </th>
+                <th className="text-right py-4 px-6 text-xs font-semibold text-gray-400 uppercase">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-800">
@@ -128,6 +129,11 @@ const AllBooks = () => {
                       </span>
                     </td>
                     <td className="py-4 px-6 text-right">{b.publisher}</td>
+                    <td className="py-4 px-6 text-right">
+                      <button className="py-3 px-2 rounded-md bg-blue-600 hover:bg-blue-400 transition-all">
+                        Borrow Book
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}

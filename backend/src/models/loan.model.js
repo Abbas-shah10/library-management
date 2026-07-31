@@ -11,6 +11,7 @@ const Loan = sequelize.define("Loan", {
   due_date: { type: DataTypes.DATEONLY, allowNull: false },
   return_date: { type: DataTypes.DATEONLY },
   status: { type: DataTypes.ENUM("active", "returned", "overdue"), defaultValue: "active", allowNull: false },
+  overdue_notified: { type: DataTypes.BOOLEAN, defaultValue: false, allowNull: false },
 }, { timestamps: false });
 
 export default Loan;

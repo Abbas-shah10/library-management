@@ -24,14 +24,22 @@ const authenticate = async (req, res, next) => {
     } catch (error) {
       res.status(401).json({ message: "Not authorized, token failed" });
     }
+  } else {
+    return res.status(401).json({ message: "Not authorized, no token provided" });
   }
 };
 
-const authorize = async (req, res, next) => {
-  if (req.user?.role === 'Admin' || req.user?.role === "Librarian" || req.user?.role === "Member") {
+const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Not Authorized as Admin' })
+    }
+
+    if (roles.length > 0 && !roles.includes(req.user.role)) {
+      return res.status(403).json({ message: `Not authorized, requires role: ${roles.join(", ")}` })
+    }
+
     next();
-  } else {
-    res.status(401).json({ message: 'Not Authorized as Admin' })
   }
 }
 

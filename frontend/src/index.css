@@ -10,7 +10,12 @@
   }
 
   body {
-    @apply bg-dark-1 text-white min-h-screen font-inter;
+    @apply bg-gray-50 text-gray-900 min-h-screen font-inter;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .dark body {
+    @apply bg-dark-1 text-white;
   }
 }
 

@@ -1,4 +1,5 @@
 import { Book, Loan, Member, Reservation } from '../models/associations.js'
+import { sendEmail, reservationEmailTemplate } from '../utils/emailService.js'
 
 const createReservation = async (req, res) => {
   try {
@@ -19,7 +20,7 @@ const createReservation = async (req, res) => {
       return res.status(400).json({ message: "Book is already checked out" })
     }
 
-    const reservation = await Reservation.findOne({ where: { book_id: book_id, status: ['pending', 'confirmed'] } })
+    const reservation = await Reservation.findOne({ where: { book_id: book_id, status: 'waiting' } })
 
     if (reservation) {
       return res.status(400).json({ message: "Reservation rejected someone" })
@@ -88,13 +89,29 @@ const fetchReservationById = async (req, res) => {
 }
 
 const fulfillReservation = async (req, res) => {
-  const reservation = await Reservation.findByPk(req.params.id);
+  const reservation = await Reservation.findByPk(req.params.id, {
+    include: [
+      { model: Member, attributes: ["id", "name", "email"] },
+      { model: Book, attributes: ["id", "title"] },
+    ]
+  });
 
   if (!reservation) {
     return res.status(404).json({ message: "Could not find reservation" });
   } else {
     if (reservation.status === 'waiting') {
       await reservation.update({ status: "fulfilled" })
+
+      if (reservation.Member?.email) {
+        await sendEmail({
+          to: reservation.Member.email,
+          subject: `Your reserved book is available: ${reservation.Book?.title}`,
+          html: reservationEmailTemplate({
+            memberName: reservation.Member.name,
+            bookTitle: reservation.Book?.title || 'Unknown book',
+          }),
+        })
+      }
 
       return res.status(200).json({ message: "Reservation status fulfilled" })
     } else {

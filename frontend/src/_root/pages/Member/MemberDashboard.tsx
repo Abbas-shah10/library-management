@@ -80,32 +80,50 @@ const MemberDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm text-gray-400 uppercase tracking-wide">Borrowed</p>
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-lg">📖</div>
+                <p className="text-sm text-gray-400 uppercase tracking-wide">
+                  Borrowed
+                </p>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-lg">
+                  📖
+                </div>
               </div>
               <p className="text-3xl font-bold">{activeLoans}</p>
             </div>
             <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm text-gray-400 uppercase tracking-wide">Returned</p>
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-lg">✅</div>
+                <p className="text-sm text-gray-400 uppercase tracking-wide">
+                  Returned
+                </p>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-lg">
+                  ✅
+                </div>
               </div>
               <p className="text-3xl font-bold">{returnedLoans}</p>
             </div>
             <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm text-gray-400 uppercase tracking-wide">Fines</p>
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-lg">💰</div>
+                <p className="text-sm text-gray-400 uppercase tracking-wide">
+                  Fines
+                </p>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-lg">
+                  💰
+                </div>
               </div>
               <p className="text-3xl font-bold">{pendingFines}</p>
               {pendingFines > 0 && (
-                <p className="text-xs text-amber-400 mt-1">${pendingFinesTotal} unpaid</p>
+                <p className="text-xs text-amber-400 mt-1">
+                  ${pendingFinesTotal} unpaid
+                </p>
               )}
             </div>
             <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-sm text-gray-400 uppercase tracking-wide">Reservations</p>
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-lg">🔖</div>
+                <p className="text-sm text-gray-400 uppercase tracking-wide">
+                  Reservations
+                </p>
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-lg">
+                  🔖
+                </div>
               </div>
               <p className="text-3xl font-bold">{activeReservations.length}</p>
             </div>
@@ -117,10 +135,12 @@ const MemberDashboard = () => {
               <span className="text-2xl">⏰</span>
               <div>
                 <p className="font-semibold text-rose-300">
-                  You have {overdueLoans} overdue book{overdueLoans > 1 ? "s" : ""}!
+                  You have {overdueLoans} overdue book
+                  {overdueLoans > 1 ? "s" : ""}!
                 </p>
                 <p className="text-sm text-gray-400">
-                  Please return them as soon as possible to avoid additional fines.
+                  Please return them as soon as possible to avoid additional
+                  fines.
                 </p>
               </div>
               <Link
@@ -136,7 +156,10 @@ const MemberDashboard = () => {
           <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
             <div className="p-5 border-b border-gray-800 flex items-center justify-between">
               <h3 className="font-semibold">Currently Borrowed</h3>
-              <Link to="/my-books" className="text-sm text-purple-400 hover:text-purple-300">
+              <Link
+                to="/my-books"
+                className="text-sm text-purple-400 hover:text-purple-300"
+              >
                 View All
               </Link>
             </div>
@@ -154,7 +177,8 @@ const MemberDashboard = () => {
                   {currentlyBorrowed.map((loan) => {
                     const isOverdue =
                       loan.status === "overdue" ||
-                      (!loan.return_date && new Date(loan.due_date) < new Date());
+                      (!loan.return_date &&
+                        new Date(loan.due_date) < new Date());
                     return (
                       <tr
                         key={loan.id}
@@ -222,7 +246,7 @@ const MemberDashboard = () => {
               </div>
             </Link>
             <Link
-              to="/reservations"
+              to="/member/reservations"
               className="bg-gray-900 rounded-xl p-5 border border-gray-800 hover:border-emerald-700 transition group"
             >
               <div className="flex items-center gap-4">
@@ -245,10 +269,17 @@ const MemberDashboard = () => {
               </div>
               <div className="divide-y divide-gray-800/50">
                 {activeReservations.map((res) => (
-                  <div key={res.id} className="p-4 flex items-center justify-between">
+                  <div
+                    key={res.id}
+                    className="p-4 flex items-center justify-between"
+                  >
                     <div>
-                      <p className="text-gray-200">{res.Book?.title || `Book #${res.book_id}`}</p>
-                      <p className="text-xs text-gray-500">{res.reservation_date}</p>
+                      <p className="text-gray-200">
+                        {res.Book?.title || `Book #${res.book_id}`}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {res.reservation_date}
+                      </p>
                     </div>
                     <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300">
                       {res.status}

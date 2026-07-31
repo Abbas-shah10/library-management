@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import cors from 'cors'
 // Utils
 import sequelize from "./db/connectDb.js";
-import { memberRoutes, userRoutes, bookRoutes, loanRoutes, authorRoutes, fineRoutes, reservationRoutes } from "./routes/index.js";
+import { memberRoutes, userRoutes, bookRoutes, loanRoutes, authorRoutes, fineRoutes, reservationRoutes, categoryRoutes, reportRoutes } from "./routes/index.js";
+import { runOverdueCheck } from "./services/overdueService.js";
 dotenv.config();
 
 const app = express();
@@ -38,6 +39,27 @@ app.use("/api/v1/loans", loanRoutes);
 app.use('/api/v1/authors', authorRoutes);
 app.use("/api/v1/fines", fineRoutes)
 app.use("/api/v1/reservations", reservationRoutes)
+app.use("/api/v1/categories", categoryRoutes)
+app.use("/api/v1/reports", reportRoutes)
+
+const OVERDUE_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;
+
 app.listen(PORT, () => {
   console.log(`App is listening on port : ${PORT}`);
+  setTimeout(async () => {
+    try {
+      const result = await runOverdueCheck();
+      console.log(`[OVERDUE JOB] ${result.marked} marked overdue, ${result.emailed} email(s) sent`);
+    } catch (error) {
+      console.error("[OVERDUE JOB] Failed:", error.message);
+    }
+  }, 5000);
+  setInterval(async () => {
+    try {
+      await runOverdueCheck();
+    } catch (error) {
+      console.error("[OVERDUE JOB] Failed:", error.message);
+    }
+  }, OVERDUE_CHECK_INTERVAL_MS);
+  console.log("Overdue check job scheduled (every 6 hours)");
 });

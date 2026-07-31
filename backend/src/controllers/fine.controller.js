@@ -1,16 +1,23 @@
 import { Book, Fine, Loan, Member } from '../models/associations.js'
+import { sendEmail, fineEmailTemplate } from '../utils/emailService.js'
 
 const createFine = async (req, res) => {
   try {
     const { loan_id, amount } = req.body;
 
     if (!loan_id || !amount) {
-      res.status(400).json({ message: "All fields are required" })
+      return res.status(400).json({ message: "All fields are required" })
     }
 
-    const loan = await Loan.findByPk(loan_id)
+    const loan = await Loan.findByPk(loan_id, {
+      include: [
+        { model: Member, attributes: ['id', 'name', 'email'] },
+        { model: Book, attributes: ['id', 'title'] },
+      ]
+    })
+
     if (!loan) {
-      res.status(404).json({ message: "Loan not found" })
+      return res.status(404).json({ message: "Loan not found" })
     }
 
     const fine = await Fine.create({
@@ -19,6 +26,18 @@ const createFine = async (req, res) => {
       fine_date: new Date(),
     })
 
+    if (loan.Member?.email) {
+      await sendEmail({
+        to: loan.Member.email,
+        subject: `New Fine: $${amount}`,
+        html: fineEmailTemplate({
+          memberName: loan.Member.name,
+          bookTitle: loan.Book?.title || 'Unknown book',
+          amount,
+        }),
+      })
+    }
+
     if (fine) {
       res.status(201).json({ message: "Fine is created successfully", data: { fine } })
     } else {
@@ -26,7 +45,7 @@ const createFine = async (req, res) => {
     }
 
   } catch (error) {
-    console.error("Logout error:", error);
+    console.error("Create fine error:", error);
     res.status(500).json({ message: "Something went wrong", error: error.message });
   }
 }
@@ -54,7 +73,8 @@ const getAllFines = async (req, res) => {
 const getFinesByLoan = async (req, res) => {
   try {
     const { loanId } = req.params;
-    const fines = await Fine.findAll({ where: { loan_id: loanId } }, {
+    const fines = await Fine.findAll({
+      where: { loan_id: loanId },
       include: { model: Loan, include: [Book, Member] },
       order: [['fine_date', 'DESC']]
     })
@@ -67,7 +87,7 @@ const getFinesByLoan = async (req, res) => {
     }
 
   } catch (error) {
-    console.error("Logout error:", error);
+    console.error("Fetch fines error:", error);
     res.status(500).json({ message: "Something went wrong", error: error.message });
   }
 }

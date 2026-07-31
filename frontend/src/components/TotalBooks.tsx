@@ -10,13 +10,13 @@ const TotalBooks = ({ books }: { books: any[] }) => {
 
   return (
     <Link to="/admin/books">
-      <div className="bg-gray-900 rounded-xl p-5 border border-gray-800 hover:border-gray-700 transition">
+      <div className="bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 transition">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-sm text-gray-400 uppercase tracking-wide">
+            <p className="text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide">
               Total Books
             </p>
-            <p className="text-3xl font-bold text-white mt-1">{total}</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white mt-1">{total}</p>
           </div>
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-2xl">
             📚
@@ -24,45 +24,45 @@ const TotalBooks = ({ books }: { books: any[] }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-3 text-sm mb-4">
-          <div className="bg-gray-800 rounded-lg p-3">
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span className="text-gray-400">Available</span>
+              <span className="text-gray-500 dark:text-gray-400">Available</span>
             </div>
-            <p className="text-white font-bold text-lg mt-1">{available}</p>
+            <p className="text-gray-900 dark:text-white font-bold text-lg mt-1">{available}</p>
           </div>
-          <div className="bg-gray-800 rounded-lg p-3">
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-amber-400" />
-              <span className="text-gray-400">Loaned Out</span>
+              <span className="text-gray-500 dark:text-gray-400">Loaned Out</span>
             </div>
-            <p className="text-white font-bold text-lg mt-1">{loaned}</p>
+            <p className="text-gray-900 dark:text-white font-bold text-lg mt-1">{loaned}</p>
           </div>
-          <div className="bg-gray-800 rounded-lg p-3">
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-blue-400" />
-              <span className="text-gray-400">Multi Copies</span>
+              <span className="text-gray-500 dark:text-gray-400">Multi Copies</span>
             </div>
-            <p className="text-white font-bold text-lg mt-1">
+            <p className="text-gray-900 dark:text-white font-bold text-lg mt-1">
               {multipleCopies}
             </p>
           </div>
-          <div className="bg-gray-800 rounded-lg p-3">
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-red-400" />
-              <span className="text-gray-400">All Loaned</span>
+              <span className="text-gray-500 dark:text-gray-400">All Loaned</span>
             </div>
-            <p className="text-white font-bold text-lg mt-1">{zeroCopies}</p>
+            <p className="text-gray-900 dark:text-white font-bold text-lg mt-1">{zeroCopies}</p>
           </div>
         </div>
 
-        <div className="h-2 rounded-full bg-gray-800 overflow-hidden">
+        <div className="h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
           <div
             className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500 transition-all"
             style={{ width: `${pct}%` }}
           />
         </div>
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
           {pct}% of books have copies available
         </p>
       </div>

@@ -15,7 +15,7 @@ const LeftSidebar = () => {
   const { pathname } = useLocation();
 
   return (
-    <nav className="fixed left-0 h-screen w-[260px] bg-[#1a1a23] border-r border-gray-800 p-4 max-sm:hidden">
+    <nav className="fixed left-0 h-screen w-[260px] bg-gray-50 dark:bg-[#1a1a23] border-r border-gray-200 dark:border-gray-800 p-4 max-sm:hidden">
       <div className="flex flex-col gap-11">
         <ul className="flex flex-col gap-6">
           {user ? (

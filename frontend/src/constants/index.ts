@@ -12,7 +12,6 @@ import {
   RefreshCw,
   Search,
   Settings,
-  User,
   Users,
 } from "lucide-react";
 

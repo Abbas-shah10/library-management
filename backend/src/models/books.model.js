@@ -12,6 +12,7 @@ const Book = sequelize.define("Book", {
   available_copies: { type: DataTypes.INTEGER, defaultValue: 1, allowNull: false },
   shelf_location: { type: DataTypes.STRING(50) },
   category_id: { type: DataTypes.INTEGER, allowNull: true },
+  user_id: { type: DataTypes.INTEGER, allowNull: true },
   active: { type: DataTypes.BOOLEAN, defaultValue: true, allowNull: false },
 }, { timestamps: true });
 

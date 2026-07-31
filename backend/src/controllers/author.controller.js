@@ -6,7 +6,7 @@ const createAuthor = async (req, res) => {
     const { name, bio, bookIds } = req.body;
 
     if (!name || !bio) {
-      res.status(400).json({ message: "All fields are required" })
+      return res.status(400).json({ message: "All fields are required" })
     }
 
     const newAuthor = await Author.create({
@@ -15,8 +15,8 @@ const createAuthor = async (req, res) => {
     })
 
     if (bookIds?.length) {
-      const books = await Book.findAll({ where: { bookIds } })
-      await author.setBooks(books);
+      const books = await Book.findAll({ where: { id: bookIds } })
+      await newAuthor.setBooks(books);
     }
 
     if (newAuthor) {
@@ -38,18 +38,39 @@ const updateAuthor = async (req, res) => {
     const author = await Author.findByPk(id);
 
     if (author) {
-      const updatedAuthor = await author.update(req.body);
+      const { bookIds } = req.body;
 
-      if (updatedAuthor) {
-        return res.status(200).json({ message: "Author updated successfully", updatedAuthor })
-      } else {
-        return res.status(400).json({ message: "Error updating author" })
+      if (bookIds) {
+        const books = await Book.findAll({ where: { id: bookIds } })
+        await author.setBooks(books);
       }
+
+      const { name, bio } = req.body;
+
+      if (name !== undefined || bio !== undefined) {
+        await author.update({ name, bio });
+      }
+
+      return res.status(200).json({ message: "Author updated successfully", author })
     } else {
       return res.status(404).json({ message: "Could not find author" })
     }
 
 
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ message: "Something went wrong", error: error.message })
+  }
+}
+
+const getAllAuthors = async (req, res) => {
+  try {
+    const authors = await Author.findAll({
+      include: { model: Book, attributes: ['id', 'title'], through: { attributes: [] } },
+      order: [['name', 'ASC']],
+    })
+
+    return res.status(200).json({ message: "Authors fetched successfully", authors })
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ message: "Something went wrong", error: error.message })
@@ -93,4 +114,4 @@ const deleteAuthor = async (req, res) => {
   }
 }
 
-export { createAuthor, updateAuthor, getAuthorById, deleteAuthor };
+export { createAuthor, updateAuthor, getAllAuthors, getAuthorById, deleteAuthor };
