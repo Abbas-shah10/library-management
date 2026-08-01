@@ -259,6 +259,3 @@ This project is licensed under the MIT License.
 ## 👨‍💻 Author
 
 **AbBaS kHaN**
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/your-profile)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/your-username)
