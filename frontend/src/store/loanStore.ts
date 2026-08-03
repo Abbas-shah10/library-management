@@ -4,7 +4,7 @@ import * as loanApi from "../api/loanApi";
 type Loan = {
   id: number;
   book_id: number;
-  member_id: number;
+  member_id: string | undefined | number;
   loan_date: string | number;
   due_date: string | number;
   return_date: string | number;
@@ -44,7 +44,7 @@ const useLoanStore = create<LoanState>((set) => ({
       });
     }
   },
-  borrowBook: async (payload) => {
+  borrowBook: async (payload: Partial<Loan>) => {
     set({ loading: true, error: null });
     try {
       const data = await loanApi.borrowBook(payload);
