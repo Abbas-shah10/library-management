@@ -32,14 +32,14 @@ const TopBar = () => {
 
         {/* Right side */}
         <div className="flex items-center gap-3">
-          {/* Theme toggle */}
+          {/* Theme toggle
           <button
             onClick={toggleTheme}
             className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-500 hover:text-purple-600 hover:bg-purple-500/10 transition-all duration-200 dark:text-gray-400 dark:hover:text-purple-400"
             title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
           >
             {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-          </button>
+          </button> */}
 
           {/* Profile */}
           <Link
