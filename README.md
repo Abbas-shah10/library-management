@@ -248,9 +248,6 @@ frontend/
 - [ ] Dark mode toggle
 - [ ] PDF export for reports
 
----
-
----
 
 ## 👨‍💻 Author
 
