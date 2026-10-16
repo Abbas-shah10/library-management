@@ -238,13 +238,6 @@ frontend/
 
 ---
 
-## 🔮 Future Enhancements
-
-- [ ] Librarian role dashboard (Issue Book, Return Book, Overdue)
-- [ ] Member portal (Browse Books, My Books, Reservations)
-- [ ] Email notifications for overdue books
-- [ ] Barcode / QR code scanning for books
-
 ## 👨‍💻 Author
 
 **AbBaS kHaN**
